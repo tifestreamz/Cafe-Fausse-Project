@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0a0a;}
+*{box-sizing:border-box;}
+a{color:#c8a97e;text-decoration:none;}
+a:hover{color:#e2c69a;}
+::selection{background:#c8a97e;color:#0a0a0a;}
+input::placeholder,textarea::placeholder{color:#6b665e;}
+select option{background:#141210;color:#e8e3da;}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div style="background:#0a0a0a;color:#cfc9c0;font-family:Inter,sans-serif;min-height:100vh;overflow-x:hidden">
+
+  <div style="background:#050505;padding:9px 48px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;color:#a98a5c;border-bottom:1px solid rgba(200,169,126,0.12)">
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <span>28 Delancey St, London NW1 7NL</span>
+      <span style="color:#4a453e">•</span>
+      <span>Open daily · 12:00 – 23:00</span>
+    </div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <span>+44 20 7946 0891</span>
+      <span style="color:#4a453e">•</span>
+      <span>hello@vaultrestaurant.com</span>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:22px 48px;border-bottom:1px solid rgba(200,169,126,0.15);flex-wrap:wrap;gap:16px">
+    <div onClick="{{ goHome }}" style="display:flex;align-items:baseline;gap:6px;cursor:pointer;font-family:'Playfair Display',serif;font-size:26px;letter-spacing:1px;color:#f0ece4">
+      <span style="color:#c8a97e">*</span> vault
+    </div>
+    <div style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center">
+      <sc-for list="{{navLinks}}" as="link" hint-placeholder-count="6">
+        <span onClick="{{ link.onClick }}" style="{{ link.style }}">{{ link.label }}</span>
+      </sc-for>
+    </div>
+    <button onClick="{{ goReserve }}" style="padding:13px 28px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">FIND A TABLE</button>
+  </div>
+
+  <sc-if value="{{isHome}}" hint-placeholder-val="{{true}}">
+    <div data-screen-label="Home">
+
+      <div style="position:relative;height:640px;overflow:hidden">
+        <image-slot id="home-hero" shape="rect" placeholder="atmospheric dining room photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.55) 0%,rgba(10,10,10,0.35) 40%,rgba(10,10,10,0.9) 100%);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">FINE DINING &amp; LOUNGE</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:56px;color:#f4f0e8;margin:18px 0;font-weight:500;max-width:760px;text-wrap:pretty">An Unforgettable Evening Awaits</h1>
+          <div style="color:#c9c3b8;font-size:16px;max-width:520px;line-height:1.7;margin-bottom:32px">Seasonal menus, rare wines, and a room built for the moments worth savoring.</div>
+          <button onClick="{{ goReserve }}" style="padding:15px 34px;background:#c8a97e;border:none;color:#0a0a0a;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">FIND A TABLE</button>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:110px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <image-slot id="home-story" shape="rect" placeholder="chef plating dish" style="width:100%;height:440px"></image-slot>
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">OUR STORY</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:38px;color:#f0ece4;margin:16px 0 20px;font-weight:500">Crafted With Patience, Served With Precision</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8;margin-bottom:28px">Since opening our doors, Vault has stood for one idea: that a meal can be an occasion. Our kitchen sources close, ages long, and plates with restraint — letting the ingredient lead.</div>
+          <span onClick="{{ goAbout }}" style="cursor:pointer;font-size:13px;letter-spacing:2px;color:#c8a97e;border-bottom:1px solid #c8a97e;padding-bottom:4px">LEARN MORE</span>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:0 24px 100px;text-align:center">
+        <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">TASTE THE VAULT</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0 8px">
+          <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#c8a97e"></span>
+          <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+        </div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:38px;color:#f0ece4;margin:8px 0 56px;font-weight:500">Chef's Signature Dishes</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:44px;text-align:center">
+          <sc-for list="{{featuredDishes}}" as="dish" hint-placeholder-count="3">
+            <div>
+              <image-slot id="{{dish.imgId}}" shape="circle" placeholder="dish photo" style="width:120px;height:120px;margin:0 auto 20px"></image-slot>
+              <div style="font-family:'Playfair Display',serif;font-size:20px;color:#f0ece4">{{dish.name}}</div>
+              <div style="color:#c8a97e;font-size:14px;margin-top:4px">{{dish.price}}</div>
+              <div style="color:#8f8a82;font-size:13px;margin-top:8px;line-height:1.6">{{dish.desc}}</div>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ goMenu }}" style="margin-top:56px;padding:14px 32px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">VIEW FULL MENU</button>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto 110px;padding:0 24px;display:grid;grid-template-columns:1.1fr 1fr;gap:4px">
+        <image-slot id="home-events" shape="rect" placeholder="private event photo" style="width:100%;min-height:340px"></image-slot>
+        <div style="background:#141210;border:1px solid rgba(200,169,126,0.3);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div style="font-family:'Playfair Display',serif;font-size:30px;color:#f0ece4">Private Events &amp; Celebrations</div>
+          <div style="color:#9c968d;font-size:14px;line-height:1.7">Reserve one of our private rooms for milestone dinners, corporate gatherings, or intimate celebrations — tailored menus included.</div>
+          <span onClick="{{ goEvents }}" style="margin-top:6px;cursor:pointer;font-size:13px;letter-spacing:2px;color:#c8a97e;border-bottom:1px solid #c8a97e;padding-bottom:4px;align-self:flex-start">EXPLORE PRIVATE EVENTS</span>
+        </div>
+      </div>
+
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isMenu}}" hint-placeholder-val="{{false}}">
+    <div data-screen-label="Menu">
+
+      <div style="position:relative;height:420px;overflow:hidden">
+        <image-slot id="menu-hero" shape="rect" placeholder="table setting photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,10,10,0.68);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">DELICIOUS &amp; AMAZING</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:48px;color:#f4f0e8;margin:16px 0 0;font-weight:500">Our Menu</h1>
+        </div>
+      </div>
+
+      <sc-for list="{{menuCategories}}" as="cat" hint-placeholder-count="4">
+        <div id="{{cat.key}}" style="max-width:1120px;margin:0 auto;padding:90px 24px 20px;text-align:center">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">{{cat.label}}</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0 8px">
+            <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+            <span style="width:6px;height:6px;border-radius:50%;background:#c8a97e"></span>
+            <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+          </div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:42px;color:#f0ece4;margin:8px 0 50px;font-weight:500">{{cat.title}}</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 60px;text-align:left">
+            <sc-for list="{{cat.items}}" as="item" hint-placeholder-count="6">
+              <div style="display:flex;gap:18px;align-items:flex-start;padding:18px 0;border-bottom:1px solid rgba(200,169,126,0.12)">
+                <image-slot id="{{item.imgId}}" shape="circle" placeholder="dish photo" style="width:72px;height:72px"></image-slot>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                    <div style="font-family:'Playfair Display',serif;font-size:19px;color:#f0ece4">{{item.name}}</div>
+                    <div style="font-size:15px;color:#c8a97e;white-space:nowrap">{{item.price}}</div>
+                  </div>
+                  <div style="font-size:14px;color:#8f8a82;margin-top:6px;line-height:1.5">{{item.desc}}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+
+      <div id="events" style="max-width:1120px;margin:60px auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px">
+        <div style="background:#141210;border:1px solid rgba(200,169,126,0.3);padding:44px 34px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;color:#f0ece4">Private Events</div>
+          <div style="color:#9c968d;font-size:14px;line-height:1.6">Celebrate milestones and gatherings in our reserved dining rooms, tailored menus included.</div>
+          <span style="height:1px;width:36px;background:#c8a97e;display:block;margin:6px 0"></span>
+          <div style="font-size:12px;letter-spacing:2px;color:#c8a97e">BOOKING REQUEST</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;color:#f0ece4">+44 20 7946 0891</div>
+          <button onClick="{{ goReserve }}" style="margin-top:8px;align-self:flex-start;padding:12px 26px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">BOOK NOW</button>
+        </div>
+        <image-slot id="promo-private-1" shape="rect" placeholder="couple dining photo" style="width:100%;min-height:320px"></image-slot>
+        <image-slot id="promo-private-2" shape="rect" placeholder="reserved table tent photo" style="width:100%;min-height:320px"></image-slot>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto 40px;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:4px">
+        <image-slot id="promo-banquet-1" shape="rect" placeholder="restaurant interior photo" style="width:100%;min-height:320px"></image-slot>
+        <image-slot id="promo-banquet-2" shape="rect" placeholder="floral decor photo" style="width:100%;min-height:320px"></image-slot>
+        <div style="background:#141210;border:1px solid rgba(200,169,126,0.3);padding:44px 34px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;color:#f0ece4">Banquet Hall</div>
+          <div style="color:#9c968d;font-size:14px;line-height:1.6">A grand room for weddings and receptions of up to 120 guests, fully staffed and styled to order.</div>
+          <span style="height:1px;width:36px;background:#c8a97e;display:block;margin:6px 0"></span>
+          <div style="font-size:12px;letter-spacing:2px;color:#c8a97e">BOOKING REQUEST</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;color:#f0ece4">+44 20 7946 0891</div>
+          <button onClick="{{ goReserve }}" style="margin-top:8px;align-self:flex-start;padding:12px 26px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">BOOK NOW</button>
+        </div>
+      </div>
+
+      <div id="reservation" style="position:relative;padding:110px 24px;background:#0d0c0a;border-top:1px solid rgba(200,169,126,0.15)">
+        <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:70px">
+          <div>
+            <h2 style="font-family:'Playfair Display',serif;font-size:34px;color:#f0ece4;margin:0 0 8px;font-weight:500">Online Reservation</h2>
+            <div style="color:#8f8a82;font-size:14px;margin-bottom:32px">Booking requests are confirmed within one hour of submission.</div>
+            <sc-if value="{{submitted}}" hint-placeholder-val="{{false}}">
+              <div style="padding:20px;border:1px solid rgba(200,169,126,0.4);color:#c8a97e;font-size:14px">Thank you — your table request has been received. We'll confirm by email shortly.</div>
+            </sc-if>
+            <sc-if value="{{notSubmitted}}" hint-placeholder-val="{{true}}">
+              <form onSubmit="{{ submitReservation }}" style="display:flex;flex-direction:column;gap:22px">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                  <input value="{{ form.name }}" onChange="{{ setName }}" placeholder="Your Name" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+                  <input value="{{ form.phone }}" onChange="{{ setPhone }}" placeholder="Phone Number" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+                  <select value="{{ form.persons }}" onChange="{{ setPersons }}" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif">
+                    <option value="1">1 Person</option>
+                    <option value="2">2 Persons</option>
+                    <option value="4">4 Persons</option>
+                    <option value="6">6 Persons</option>
+                    <option value="8">8+ Persons</option>
+                  </select>
+                  <input type="date" value="{{ form.date }}" onChange="{{ setDate }}" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+                  <input type="time" value="{{ form.hour }}" onChange="{{ setHour }}" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+                </div>
+                <textarea value="{{ form.message }}" onChange="{{ setMessage }}" placeholder="Message" rows="3" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif;resize:none"></textarea>
+                <button type="submit" style="margin-top:6px;padding:15px 0;background:#c8a97e;border:none;color:#0a0a0a;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">BOOK A TABLE</button>
+              </form>
+            </sc-if>
+          </div>
+          <div>
+            <h2 style="font-family:'Playfair Display',serif;font-size:34px;color:#f0ece4;margin:0 0 32px;font-weight:500">Contact Us</h2>
+            <div style="display:flex;flex-direction:column;gap:26px">
+              <div>
+                <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">BOOKING REQUEST</div>
+                <div style="font-family:'Playfair Display',serif;font-size:24px;color:#f0ece4">+44 20 7946 0891</div>
+              </div>
+              <div>
+                <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">LOCATION</div>
+                <div style="font-size:15px;color:#cfc9c0;line-height:1.6">28 Delancey St, London NW1 7NL</div>
+              </div>
+              <div>
+                <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">LUNCH TIME</div>
+                <div style="font-size:15px;color:#cfc9c0;line-height:1.6">Monday to Sunday, 12:00 – 15:00</div>
+              </div>
+              <div>
+                <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">DINNER TIME</div>
+                <div style="font-size:15px;color:#cfc9c0;line-height:1.6">Monday to Sunday, 18:00 – 23:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isAbout}}" hint-placeholder-val="{{false}}">
+    <div data-screen-label="About Us">
+
+      <div style="position:relative;height:420px;overflow:hidden">
+        <image-slot id="about-hero" shape="rect" placeholder="dining room ambience photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,10,10,0.68);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">SINCE 2012</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:48px;color:#f4f0e8;margin:16px 0 0;font-weight:500">About Us</h1>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:110px 24px 90px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <image-slot id="about-1" shape="rect" placeholder="chef at pass photo" style="width:100%;height:460px"></image-slot>
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">OUR STORY</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:36px;color:#f0ece4;margin:16px 0 20px;font-weight:500">A Room Built for the Moment</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8">Vault opened in a converted bank vault in 2012 with a simple ambition — to make fine dining feel personal again. Every dish leaves the kitchen the way it would be served to family: unhurried, deliberate, and generous.</div>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:0 24px 90px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <div style="order:1">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">OUR PHILOSOPHY</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:36px;color:#f0ece4;margin:16px 0 20px;font-weight:500">Close Sourcing, Long Aging, Quiet Confidence</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8">We work with a handful of farms and fishmongers we've known for years, age our meats in-house, and change the menu with the seasons rather than the calendar. Nothing on the table is there by accident.</div>
+        </div>
+        <image-slot id="about-2" shape="rect" placeholder="ingredients close-up photo" style="width:100%;height:460px;order:2"></image-slot>
+      </div>
+
+      <div style="position:relative;height:460px;overflow:hidden">
+        <image-slot id="about-3" shape="rect" placeholder="wide dining room photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,10,10,0.5);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 24px">
+          <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:28px;color:#f4f0e8;text-align:center;max-width:640px;line-height:1.5">"Hospitality is the art of making people feel like they arrived somewhere they belong."</div>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:90px 24px 110px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <image-slot id="about-4" shape="rect" placeholder="head chef portrait photo" style="width:100%;height:460px"></image-slot>
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">THE TEAM</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:36px;color:#f0ece4;margin:16px 0 20px;font-weight:500">Led From the Pass</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8;margin-bottom:28px">Our head chef and a tight brigade of a dozen run the kitchen nightly, joined front-of-house by a team who know most regulars by name and every dish by heart.</div>
+          <button onClick="{{ goReserve }}" style="padding:15px 30px;background:#c8a97e;border:none;color:#0a0a0a;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">RESERVE YOUR TABLE</button>
+        </div>
+      </div>
+
+    </div>
+  </sc-if>
+
+  <div id="footer" style="border-top:1px solid rgba(200,169,126,0.15);padding:80px 24px 0;background:#070706">
+    <div style="max-width:1120px;margin:0 auto;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:24px;color:#f0ece4;margin-bottom:18px"><span style="color:#c8a97e">*</span> vault</div>
+      <div style="color:#9c968d;font-size:14px;line-height:1.8">28 Delancey St, London NW1 7NL &nbsp;·&nbsp; hello@vaultrestaurant.com &nbsp;·&nbsp; Open 12:00 – 23:00</div>
+    </div>
+    <div style="max-width:1120px;margin:56px auto 0;padding-top:56px;border-top:1px solid rgba(200,169,126,0.12);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:50px">
+      <div style="display:flex;flex-wrap:wrap;gap:22px;justify-content:center">
+        <sc-for list="{{navLinks}}" as="link" hint-placeholder-count="6">
+          <span onClick="{{ link.onClick }}" style="cursor:pointer;font-size:12px;letter-spacing:1.5px;color:#9c968d">{{ link.label }}</span>
+        </sc-for>
+      </div>
+      <div style="text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:19px;color:#f0ece4;margin-bottom:12px">Get News &amp; Offers</div>
+        <div style="color:#8f8a82;font-size:13px;margin-bottom:18px">Subscribe and get 20% off your first visit.</div>
+        <sc-if value="{{subscribed}}" hint-placeholder-val="{{false}}">
+          <div style="color:#c8a97e;font-size:13px">Thanks for subscribing!</div>
+        </sc-if>
+        <sc-if value="{{notSubscribed}}" hint-placeholder-val="{{true}}">
+          <form onSubmit="{{ submitNewsletter }}" style="display:flex;gap:0;max-width:340px;margin:0 auto">
+            <input type="email" required="{{true}}" value="{{ email }}" onChange="{{ setEmail }}" placeholder="Your email" style="flex:1;background:transparent;border:1px solid rgba(200,169,126,0.3);border-right:none;color:#e8e3da;padding:12px 14px;font-size:13px;font-family:Inter,sans-serif" />
+            <button type="submit" style="padding:12px 22px;background:#c8a97e;border:none;color:#0a0a0a;font-size:12px;letter-spacing:1.5px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600;white-space:nowrap">SUBSCRIBE</button>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+    <div style="margin-top:56px;padding:22px 24px;text-align:center;border-top:1px solid rgba(200,169,126,0.12);color:#6b665e;font-size:12px">© {{year}} Vault Restaurant. All rights reserved.</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DISH = (key, idx, name, price, desc) => ({ imgId: key + '-' + idx, name, price, desc });
+
+const CATEGORIES = [
+  {
+    key: 'appetizers', label: 'STARTER MENU', title: 'Appetizers',
+    items: [
+      DISH('appetizers', 0, 'Seared Scallops', '$28', 'Pan-seared diver scallops, brown butter, citrus emulsion, micro herbs.'),
+      DISH('appetizers', 1, 'Wagyu Tartare', '$34', 'Hand-cut wagyu, quail yolk, capers, toasted brioche.'),
+      DISH('appetizers', 2, 'Burrata & Heirloom', '$22', 'Creamy burrata, heirloom tomato, basil oil, aged balsamic.'),
+      DISH('appetizers', 3, 'Foie Gras Torchon', '$36', 'Torchon of foie gras, fig compote, brioche toast.'),
+      DISH('appetizers', 4, 'Oysters on Ice', '$30', 'Half dozen chilled oysters, mignonette, fresh lemon.'),
+      DISH('appetizers', 5, 'Wild Mushroom Soup', '$19', 'Roasted wild mushrooms, truffle cream, chive oil.'),
+    ]
+  },
+  {
+    key: 'mains', label: 'CHEF SELECTION', title: 'Main Dishes',
+    items: [
+      DISH('mains', 0, 'Dry-Aged Ribeye', '$68', '45-day dry-aged ribeye, bone marrow butter, roasted bone jus.'),
+      DISH('mains', 1, 'Chilean Sea Bass', '$52', 'Miso-glazed sea bass, charred bok choy, ginger broth.'),
+      DISH('mains', 2, 'Rack of Lamb', '$58', 'Herb-crusted lamb rack, rosemary jus, roasted root vegetables.'),
+      DISH('mains', 3, 'Truffle Risotto', '$42', 'Carnaroli rice, black truffle, aged parmesan, white wine.'),
+      DISH('mains', 4, 'Duck Breast', '$48', 'Seared duck breast, cherry gastrique, potato gratin.'),
+      DISH('mains', 5, 'Lobster Tagliatelle', '$56', 'Fresh lobster, saffron cream, tagliatelle, chili oil.'),
+    ]
+  },
+  {
+    key: 'desserts', label: 'SWEET & SIMPLE', title: 'Desserts',
+    items: [
+      DISH('desserts', 0, 'Dark Chocolate Fondant', '$16', 'Warm fondant, vanilla bean ice cream, raspberry coulis.'),
+      DISH('desserts', 1, 'Crème Brûlée', '$14', 'Classic vanilla custard, caramelized sugar crust.'),
+      DISH('desserts', 2, 'Tarte Tatin', '$15', 'Caramelized apple tart, crème fraîche, calvados.'),
+      DISH('desserts', 3, 'Basque Cheesecake', '$15', 'Burnt Basque cheesecake, berry compote.'),
+      DISH('desserts', 4, 'Pistachio Panna Cotta', '$14', 'Silky pistachio panna cotta, honey tuile.'),
+      DISH('desserts', 5, 'Affogato', '$12', 'Vanilla gelato, hot espresso, cocoa nib.'),
+    ]
+  },
+  {
+    key: 'drinks', label: 'HOT & COLD', title: 'Drinks Menu',
+    items: [
+      DISH('drinks', 0, 'Vault Old Fashioned', '$19', 'Bourbon, demerara, orange bitters, smoked oak.'),
+      DISH('drinks', 1, 'Barrel-Aged Negroni', '$18', 'Gin, campari, sweet vermouth, barrel rested.'),
+      DISH('drinks', 2, 'Espresso Martini', '$17', 'Vodka, espresso, coffee liqueur, cacao dust.'),
+      DISH('drinks', 3, "Sommelier's Red", '$22', 'Curated reserve red, glass pour.'),
+      DISH('drinks', 4, 'Botanical Gin Fizz', '$16', 'Gin, elderflower, soda, citrus.'),
+      DISH('drinks', 5, 'Signature Mocktail', '$13', 'Fresh berries, mint, soda, lime.'),
+    ]
+  },
+];
+
+const FEATURED = [
+  { imgId: 'home-feat-0', name: 'Dry-Aged Ribeye', price: '$68', desc: '45-day dry-aged, bone marrow butter.' },
+  { imgId: 'home-feat-1', name: 'Seared Scallops', price: '$28', desc: 'Brown butter, citrus emulsion.' },
+  { imgId: 'home-feat-2', name: 'Dark Chocolate Fondant', price: '$16', desc: 'Warm fondant, raspberry coulis.' },
+];
+
+class Component extends DCLogic {
+  state = {
+    page: 'home',
+    form: { name: '', phone: '', persons: '2', date: '', hour: '', message: '' },
+    submitted: false,
+    email: '',
+    subscribed: false,
+  };
+
+  scrollTo(id) {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ block: 'start' });
+    }, 60);
+  }
+
+  go(page, anchor) {
+    const changed = this.state.page !== page;
+    if (changed) this.setState({ page });
+    if (anchor) this.scrollTo(anchor);
+    else if (changed) window.scrollTo(0, 0);
+  }
+
+  submitReservation(e) {
+    e.preventDefault();
+    this.setState({ submitted: true });
+  }
+
+  submitNewsletter(e) {
+    e.preventDefault();
+    this.setState({ subscribed: true });
+  }
+
+  renderVals() {
+    const page = this.state.page;
+    const linkFor = (label, target, anchor, highlight) => ({
+      label, onClick: () => this.go(target, anchor),
+      style: {
+        cursor: 'pointer', fontSize: '12px', letterSpacing: '1.5px', color: highlight ? '#c8a97e' : '#cfc9c0',
+        borderBottom: highlight ? '1px solid #c8a97e' : '1px solid transparent', paddingBottom: '4px',
+      },
+    });
+
+    return {
+      page,
+      isHome: page === 'home',
+      isMenu: page === 'menu',
+      isAbout: page === 'about',
+      navLinks: [
+        linkFor('HOME', 'home', null, page === 'home'),
+        linkFor('MENU', 'menu', null, page === 'menu'),
+        linkFor('ABOUT US', 'about', null, page === 'about'),
+        linkFor('RESERVATION', 'menu', 'reservation', false),
+        linkFor('BLOG', 'home', null, false),
+        linkFor('CONTACT US', page, 'footer', false),
+      ],
+      menuCategories: CATEGORIES,
+      featuredDishes: FEATURED,
+      goHome: () => this.go('home'),
+      goMenu: () => this.go('menu'),
+      goAbout: () => this.go('about'),
+      goReserve: () => this.go('menu', 'reservation'),
+      goEvents: () => this.go('menu', 'events'),
+      form: this.state.form,
+      setName: (e) => this.setState(s => ({ form: { ...s.form, name: e.target.value } })),
+      setPhone: (e) => this.setState(s => ({ form: { ...s.form, phone: e.target.value } })),
+      setPersons: (e) => this.setState(s => ({ form: { ...s.form, persons: e.target.value } })),
+      setDate: (e) => this.setState(s => ({ form: { ...s.form, date: e.target.value } })),
+      setHour: (e) => this.setState(s => ({ form: { ...s.form, hour: e.target.value } })),
+      setMessage: (e) => this.setState(s => ({ form: { ...s.form, message: e.target.value } })),
+      submitted: this.state.submitted,
+      notSubmitted: !this.state.submitted,
+      submitReservation: (e) => this.submitReservation(e),
+      email: this.state.email,
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      subscribed: this.state.subscribed,
+      notSubscribed: !this.state.subscribed,
+      submitNewsletter: (e) => this.submitNewsletter(e),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+:root {
+  --bg: #0a0908;
+  --bg-bar: #050403;
+  --bg-footer: #070605;
+  --bg-card: #141210;
+  --gold: #c8a97e;
+  --gold-light: #e2c69a;
+  --gold-border: rgba(200, 169, 126, 0.15);
+  --gold-border-soft: rgba(200, 169, 126, 0.12);
+  --gold-border-strong: rgba(200, 169, 126, 0.4);
+  --text-heading: #f0ece4;
+  --text-hero: #f4f0e8;
+  --text-body: #cfc9c0;
+  --text-muted: #9c968d;
+  --text-mutedest: #8f8a82;
+  --text-faint: #6b665e;
+  --error: #e39c9c;
+  --error-border: rgba(200, 80, 80, 0.5);
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--gold-light);
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: var(--font-sans);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-faint);
+}
+
+select option {
+  background: #171310;
+  color: #e8e3da;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--gold);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 14px 0 8px;
+}
+
+.divider span.line {
+  width: 40px;
+  height: 1px;
+  background: rgba(200, 169, 126, 0.5);
+}
+
+.divider span.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.btn {
+  padding: 15px 32px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-family: var(--font-sans);
+  border-radius: 0;
+  border: 1px solid var(--gold);
+  transition: opacity 0.15s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-solid {
+  background: var(--gold);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--gold);
+}

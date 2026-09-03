@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0908;}
+*{box-sizing:border-box;}
+a{color:#c8a97e;text-decoration:none;}
+a:hover{color:#e2c69a;}
+::selection{background:#c8a97e;color:#0a0908;}
+input::placeholder,textarea::placeholder{color:#6b665e;}
+select option{background:#171310;color:#e8e3da;}
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div style="background:#0a0908;color:#cfc9c0;font-family:Inter,sans-serif;min-height:100vh;overflow-x:hidden">
+
+  <div style="background:#050403;padding:9px 48px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;color:#a98a5c;border-bottom:1px solid rgba(200,169,126,0.12)">
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <span>1234 Culinary Ave, Suite 100, Washington, DC 20002</span>
+      <span style="color:#4a453e">•</span>
+      <span>Mon–Sat 5:00PM–11:00PM · Sun 5:00PM–9:00PM</span>
+    </div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <span>(202) 555-4567</span>
+      <span style="color:#4a453e">•</span>
+      <span>info@cafefausse.com</span>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 48px;border-bottom:1px solid rgba(200,169,126,0.15);flex-wrap:wrap;gap:16px">
+    <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:12px;cursor:pointer">
+      <span style="width:38px;height:38px;border-radius:50%;border:1px solid #c8a97e;color:#c8a97e;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:15px">CF</span>
+      <span style="font-family:'Playfair Display',serif;font-size:23px;letter-spacing:0.5px;color:#f0ece4">Café Fausse</span>
+    </div>
+    <div style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center">
+      <sc-for list="{{navLinks}}" as="link" hint-placeholder-count="5">
+        <span onClick="{{ link.onClick }}" style="{{ link.style }}">{{ link.label }}</span>
+      </sc-for>
+    </div>
+    <button onClick="{{ goReserve }}" style="padding:13px 26px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">RESERVE A TABLE</button>
+  </div>
+
+  <sc-if value="{{isHome}}" hint-placeholder-val="{{true}}">
+    <div data-screen-label="Home">
+      <div style="position:relative;height:640px;overflow:hidden">
+        <image-slot id="home-hero" src="assets/home-hero.webp" shape="rect" placeholder="restaurant dining room photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,9,8,0.55) 0%,rgba(10,9,8,0.35) 40%,rgba(10,9,8,0.92) 100%);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">FINE ITALIAN DINING IN WASHINGTON, DC</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:58px;color:#f4f0e8;margin:18px 0;font-weight:500;max-width:780px;text-wrap:pretty">Café Fausse</h1>
+          <div style="color:#c9c3b8;font-size:16px;max-width:540px;line-height:1.7;margin-bottom:32px">Traditional Italian flavors, modern culinary craft, and a room built for evenings worth remembering.</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+            <button onClick="{{ goReserve }}" style="padding:15px 32px;background:#c8a97e;border:none;color:#0a0908;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">RESERVE A TABLE</button>
+            <button onClick="{{ goMenu }}" style="padding:15px 32px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">VIEW MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:110px 24px 90px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <image-slot id="home-story" shape="rect" placeholder="chef plating dish photo" style="width:100%;height:440px"></image-slot>
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">OUR STORY</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:36px;color:#f0ece4;margin:16px 0 20px;font-weight:500">Founded in 2010, Rooted in Tradition</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8;margin-bottom:28px">Founded in 2010 by Chef Antonio Rossi and restaurateur Maria Lopez, Café Fausse blends traditional Italian flavors with modern culinary innovation. Our mission is to provide an unforgettable dining experience that reflects both quality and creativity.</div>
+          <span onClick="{{ goAbout }}" style="cursor:pointer;font-size:13px;letter-spacing:2px;color:#c8a97e;border-bottom:1px solid #c8a97e;padding-bottom:4px">READ OUR STORY</span>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:0 24px 110px;text-align:center">
+        <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">FROM THE KITCHEN</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0 8px">
+          <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+          <span style="width:6px;height:6px;border-radius:50%;background:#c8a97e"></span>
+          <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+        </div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:36px;color:#f0ece4;margin:8px 0 56px;font-weight:500">A Few House Favorites</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:44px">
+          <sc-for list="{{featuredDishes}}" as="dish" hint-placeholder-count="3">
+            <div>
+              <image-slot id="{{dish.imgId}}" src="{{dish.src}}" shape="circle" placeholder="dish photo" style="width:120px;height:120px;margin:0 auto 20px"></image-slot>
+              <div style="font-family:'Playfair Display',serif;font-size:20px;color:#f0ece4">{{dish.name}}</div>
+              <div style="color:#c8a97e;font-size:14px;margin-top:4px">{{dish.price}}</div>
+              <div style="color:#8f8a82;font-size:13px;margin-top:8px;line-height:1.6">{{dish.desc}}</div>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ goMenu }}" style="margin-top:56px;padding:14px 32px;background:transparent;border:1px solid #c8a97e;color:#c8a97e;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif">VIEW FULL MENU</button>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto 110px;padding:0 24px;display:grid;grid-template-columns:1.1fr 1fr;gap:4px">
+        <image-slot id="home-gallery-teaser" src="assets/gallery-event.webp" shape="rect" placeholder="special event photo" style="width:100%;min-height:340px"></image-slot>
+        <div style="background:#141210;border:1px solid rgba(200,169,126,0.3);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;color:#f0ece4">Awards &amp; Recognition</div>
+          <div style="color:#9c968d;font-size:14px;line-height:1.8">Culinary Excellence Award (2022), Restaurant of the Year (2023), and Best Fine Dining Experience — Foodie Magazine (2023).</div>
+          <span onClick="{{ goGallery }}" style="margin-top:6px;cursor:pointer;font-size:13px;letter-spacing:2px;color:#c8a97e;border-bottom:1px solid #c8a97e;padding-bottom:4px;align-self:flex-start">SEE GALLERY &amp; REVIEWS</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isMenu}}" hint-placeholder-val="{{false}}">
+    <div data-screen-label="Menu">
+      <div style="position:relative;height:360px;overflow:hidden">
+        <image-slot id="menu-hero" shape="rect" placeholder="table setting photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,9,8,0.7);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">LA CUCINA</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:46px;color:#f4f0e8;margin:16px 0 0;font-weight:500">Our Menu</h1>
+        </div>
+      </div>
+
+      <sc-for list="{{menuCategories}}" as="cat" hint-placeholder-count="4">
+        <div id="{{cat.key}}" style="max-width:1120px;margin:0 auto;padding:80px 24px 20px;text-align:center">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">{{cat.label}}</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0 8px">
+            <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+            <span style="width:6px;height:6px;border-radius:50%;background:#c8a97e"></span>
+            <span style="width:40px;height:1px;background:rgba(200,169,126,0.5)"></span>
+          </div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:38px;color:#f0ece4;margin:8px 0 50px;font-weight:500">{{cat.title}}</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 60px;text-align:left">
+            <sc-for list="{{cat.items}}" as="item" hint-placeholder-count="3">
+              <div style="display:flex;gap:18px;align-items:flex-start;padding:18px 0;border-bottom:1px solid rgba(200,169,126,0.12)">
+                <image-slot id="{{item.imgId}}" src="{{item.src}}" shape="circle" placeholder="dish photo" style="width:72px;height:72px"></image-slot>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                    <div style="font-family:'Playfair Display',serif;font-size:19px;color:#f0ece4">{{item.name}}</div>
+                    <div style="font-size:15px;color:#c8a97e;white-space:nowrap">{{item.price}}</div>
+                  </div>
+                  <div style="font-size:14px;color:#8f8a82;margin-top:6px;line-height:1.5">{{item.desc}}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+
+      <div style="text-align:center;padding:60px 24px 100px">
+        <button onClick="{{ goReserve }}" style="padding:15px 34px;background:#c8a97e;border:none;color:#0a0908;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">RESERVE A TABLE</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isReservations}}" hint-placeholder-val="{{false}}">
+    <div data-screen-label="Reservations">
+      <div style="position:relative;height:300px;overflow:hidden">
+        <image-slot id="reservations-hero" shape="rect" placeholder="candlelit table photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,9,8,0.72);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <h1 style="font-family:'Playfair Display',serif;font-size:44px;color:#f4f0e8;margin:0;font-weight:500">Reservations</h1>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:90px 24px 120px;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:70px">
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:30px;color:#f0ece4;margin:0 0 8px;font-weight:500">Book a Table</h2>
+          <div style="color:#8f8a82;font-size:14px;margin-bottom:32px">Tables are assigned automatically from our 30 available. You'll see confirmation right away.</div>
+
+          <sc-if value="{{resSubmitted}}" hint-placeholder-val="{{false}}">
+            <div style="padding:20px;border:1px solid rgba(200,169,126,0.4);color:#c8a97e;font-size:14px;line-height:1.6">Reservation confirmed — you've been assigned Table {{assignedTable}}. A confirmation has been sent to {{form.email}}.</div>
+          </sc-if>
+          <sc-if value="{{resNotSubmitted}}" hint-placeholder-val="{{true}}">
+            <form onSubmit="{{ submitReservation }}" style="display:flex;flex-direction:column;gap:22px">
+              <sc-if value="{{resError}}" hint-placeholder-val="{{false}}">
+                <div style="padding:14px 16px;border:1px solid rgba(200,80,80,0.5);color:#e39c9c;font-size:13px">Please fill in your name, email, date, and time to book a table.</div>
+              </sc-if>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                <input type="date" value="{{ form.date }}" onChange="{{ setDate }}" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+                <input type="time" value="{{ form.hour }}" onChange="{{ setHour }}" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+              </div>
+              <select value="{{ form.guests }}" onChange="{{ setGuests }}" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif">
+                <option value="1">1 Guest</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5">5 Guests</option>
+                <option value="6">6 Guests</option>
+                <option value="8">8+ Guests</option>
+              </select>
+              <input value="{{ form.name }}" onChange="{{ setName }}" placeholder="Customer Name" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+              <input type="email" value="{{ form.email }}" onChange="{{ setEmailField }}" placeholder="Email Address" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+              <input value="{{ form.phone }}" onChange="{{ setPhone }}" placeholder="Phone Number (optional)" style="background:transparent;border:none;border-bottom:1px solid rgba(200,169,126,0.3);color:#e8e3da;padding:10px 2px;font-size:14px;font-family:Inter,sans-serif" />
+              <button type="submit" style="margin-top:6px;padding:15px 0;background:#c8a97e;border:none;color:#0a0908;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">BOOK A TABLE</button>
+            </form>
+          </sc-if>
+        </div>
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:30px;color:#f0ece4;margin:0 0 32px;font-weight:500">Visit Us</h2>
+          <div style="display:flex;flex-direction:column;gap:26px">
+            <div>
+              <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">PHONE</div>
+              <div style="font-family:'Playfair Display',serif;font-size:22px;color:#f0ece4">(202) 555-4567</div>
+            </div>
+            <div>
+              <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">ADDRESS</div>
+              <div style="font-size:15px;color:#cfc9c0;line-height:1.6">1234 Culinary Ave, Suite 100<br />Washington, DC 20002</div>
+            </div>
+            <div>
+              <div style="font-size:12px;letter-spacing:2px;color:#c8a97e;margin-bottom:6px">HOURS</div>
+              <div style="font-size:15px;color:#cfc9c0;line-height:1.6">Monday – Saturday: 5:00PM – 11:00PM<br />Sunday: 5:00PM – 9:00PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isAbout}}" hint-placeholder-val="{{false}}">
+    <div data-screen-label="About Us">
+      <div style="position:relative;height:360px;overflow:hidden">
+        <image-slot id="about-hero" shape="rect" placeholder="dining room ambience photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,9,8,0.7);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">SINCE 2010</div>
+          <h1 style="font-family:'Playfair Display',serif;font-size:46px;color:#f4f0e8;margin:16px 0 0;font-weight:500">About Us</h1>
+        </div>
+      </div>
+
+      <div style="max-width:900px;margin:0 auto;padding:100px 24px 0;text-align:center">
+        <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">ABOUT CAFÉ FAUSSE</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:34px;color:#f0ece4;margin:16px 0 24px;font-weight:500">A Union of Tradition and Innovation</h2>
+        <div style="color:#9c968d;font-size:16px;line-height:1.9">Founded in 2010 by Chef Antonio Rossi and restaurateur Maria Lopez, Café Fausse blends traditional Italian flavors with modern culinary innovation. Our mission is to provide an unforgettable dining experience that reflects both quality and creativity — built on excellent food, warm hospitality, and locally sourced ingredients.</div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:90px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <image-slot id="about-antonio" shape="rect" placeholder="chef portrait photo" style="width:100%;height:440px"></image-slot>
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">THE FOUNDERS</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:32px;color:#f0ece4;margin:16px 0 20px;font-weight:500">Chef Antonio Rossi</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8">Trained in kitchens across Bologna and Rome before returning to the States, Antonio built Café Fausse's menu around the dishes he grew up on — reworked with a lighter, modern hand. He still walks the dining room most nights, plate in hand.</div>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:0 24px 100px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:60px;align-items:center">
+        <div style="order:1">
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">THE FOUNDERS</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:32px;color:#f0ece4;margin:16px 0 20px;font-weight:500">Maria Lopez</h2>
+          <div style="color:#9c968d;font-size:15px;line-height:1.8">Maria oversees every detail front-of-house, from the seasonal wine list to the relationships with the local farms that supply Café Fausse's produce. Her belief is simple: exceptional food deserves an equally exceptional welcome.</div>
+        </div>
+        <image-slot id="about-maria" shape="rect" placeholder="restaurateur portrait photo" style="width:100%;height:440px;order:2"></image-slot>
+      </div>
+
+      <div style="text-align:center;padding-bottom:110px">
+        <button onClick="{{ goReserve }}" style="padding:15px 34px;background:#c8a97e;border:none;color:#0a0908;font-size:12px;letter-spacing:2px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">RESERVE YOUR TABLE</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isGallery}}" hint-placeholder-val="{{false}}">
+    <div data-screen-label="Gallery">
+      <div style="position:relative;height:360px;overflow:hidden">
+        <image-slot id="gallery-hero" src="assets/gallery-interior.webp" shape="rect" placeholder="dining room photo" style="position:absolute;inset:0;width:100%;height:100%"></image-slot>
+        <div style="position:absolute;inset:0;background:rgba(10,9,8,0.7);pointer-events:none"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+          <h1 style="font-family:'Playfair Display',serif;font-size:46px;color:#f4f0e8;margin:0;font-weight:500">Gallery</h1>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:90px 24px 40px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+          <sc-for list="{{galleryImages}}" as="img" hint-placeholder-count="8">
+            <div onClick="{{ img.onOpen }}" style="cursor:pointer;position:relative;height:220px;overflow:hidden">
+              <image-slot id="{{img.id}}" src="{{img.src}}" shape="rect" placeholder="{{img.placeholder}}" style="width:100%;height:100%"></image-slot>
+              <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.75));font-size:12px;color:#e8e3da;pointer-events:none">{{img.caption}}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="max-width:1120px;margin:0 auto;padding:70px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:70px">
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">RECOGNITION</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:30px;color:#f0ece4;margin:16px 0 28px;font-weight:500">Awards</h2>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <sc-for list="{{awards}}" as="award" hint-placeholder-count="3">
+              <div style="display:flex;gap:14px;align-items:baseline;border-bottom:1px solid rgba(200,169,126,0.12);padding-bottom:16px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#c8a97e;flex-shrink:0;transform:translateY(-4px)"></span>
+                <div>
+                  <div style="font-family:'Playfair Display',serif;font-size:17px;color:#f0ece4">{{award.name}}</div>
+                  <div style="font-size:13px;color:#8f8a82;margin-top:4px">{{award.year}}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;letter-spacing:3px;color:#c8a97e">TESTIMONIALS</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:30px;color:#f0ece4;margin:16px 0 28px;font-weight:500">Guest Reviews</h2>
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <sc-for list="{{reviews}}" as="review" hint-placeholder-count="2">
+              <div>
+                <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:18px;color:#e8e3da;line-height:1.6">"{{review.quote}}"</div>
+                <div style="font-size:13px;color:#c8a97e;margin-top:8px;letter-spacing:1px">— {{review.source}}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{lightboxOpen}}" hint-placeholder-val="{{false}}">
+        <div onClick="{{ closeLightbox }}" style="position:fixed;inset:0;background:rgba(5,4,3,0.92);z-index:1000;display:flex;align-items:center;justify-content:center;padding:40px">
+          <span onClick="{{ closeLightbox }}" style="position:absolute;top:28px;right:40px;color:#e8e3da;font-size:28px;cursor:pointer;line-height:1">×</span>
+          <span onClick="{{ prevLightbox }}" style="position:absolute;left:24px;top:50%;transform:translateY(-50%);color:#e8e3da;font-size:36px;cursor:pointer;padding:12px">‹</span>
+          <div onClick="{{ stop }}" style="width:min(900px,80vw);height:min(600px,70vh)">
+            <image-slot id="{{lightboxImageId}}" src="{{lightboxSrc}}" shape="rect" placeholder="{{lightboxPlaceholder}}" style="width:100%;height:100%"></image-slot>
+          </div>
+          <span onClick="{{ nextLightbox }}" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);color:#e8e3da;font-size:36px;cursor:pointer;padding:12px">›</span>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <div id="footer" style="border-top:1px solid rgba(200,169,126,0.15);padding:80px 24px 0;background:#070605">
+    <div style="max-width:1120px;margin:0 auto;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:24px;color:#f0ece4;margin-bottom:18px">Café Fausse</div>
+      <div style="color:#9c968d;font-size:14px;line-height:1.8">1234 Culinary Ave, Suite 100, Washington, DC 20002 &nbsp;·&nbsp; (202) 555-4567 &nbsp;·&nbsp; info@cafefausse.com<br />Mon–Sat 5:00PM–11:00PM · Sun 5:00PM–9:00PM</div>
+    </div>
+    <div style="max-width:1120px;margin:56px auto 0;padding-top:56px;border-top:1px solid rgba(200,169,126,0.12);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:50px">
+      <div style="display:flex;flex-wrap:wrap;gap:22px;justify-content:center">
+        <sc-for list="{{navLinks}}" as="link" hint-placeholder-count="5">
+          <span onClick="{{ link.onClick }}" style="cursor:pointer;font-size:12px;letter-spacing:1.5px;color:#9c968d">{{ link.label }}</span>
+        </sc-for>
+      </div>
+      <div style="text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:19px;color:#f0ece4;margin-bottom:12px">Get News &amp; Offers</div>
+        <div style="color:#8f8a82;font-size:13px;margin-bottom:18px">Subscribe for seasonal menus and special events.</div>
+        <sc-if value="{{subscribed}}" hint-placeholder-val="{{false}}">
+          <div style="color:#c8a97e;font-size:13px">Thanks for subscribing!</div>
+        </sc-if>
+        <sc-if value="{{notSubscribed}}" hint-placeholder-val="{{true}}">
+          <form onSubmit="{{ submitNewsletter }}" style="display:flex;gap:0;max-width:340px;margin:0 auto">
+            <input type="email" required="{{true}}" value="{{ newsletterEmail }}" onChange="{{ setNewsletterEmail }}" placeholder="Your email" style="flex:1;background:transparent;border:1px solid rgba(200,169,126,0.3);border-right:none;color:#e8e3da;padding:12px 14px;font-size:13px;font-family:Inter,sans-serif" />
+            <button type="submit" style="padding:12px 22px;background:#c8a97e;border:none;color:#0a0908;font-size:12px;letter-spacing:1.5px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600;white-space:nowrap">SUBSCRIBE</button>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+    <div style="margin-top:56px;padding:22px 24px;text-align:center;border-top:1px solid rgba(200,169,126,0.12);color:#6b665e;font-size:12px">© {{year}} Café Fausse. All rights reserved.</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DISH = (key, idx, name, price, desc, src) => ({ imgId: key + '-' + idx, name, price, desc, src });
+
+const CATEGORIES = [
+  { key: 'starters', label: 'ANTIPASTI', title: 'Starters', items: [
+    DISH('starters', 0, 'Bruschetta', '$8.50', 'Fresh tomatoes, basil, olive oil, and toasted baguette slices.'),
+    DISH('starters', 1, 'Caesar Salad', '$9.00', 'Crisp romaine with homemade Caesar dressing.'),
+  ]},
+  { key: 'mains', label: 'SECONDI', title: 'Main Courses', items: [
+    DISH('mains', 0, 'Grilled Salmon', '$22.00', 'Served with lemon butter sauce and seasonal vegetables.'),
+    DISH('mains', 1, 'Ribeye Steak', '$28.00', '12 oz prime cut with garlic mashed potatoes.', 'assets/gallery-ribeye.webp'),
+    DISH('mains', 2, 'Vegetable Risotto', '$18.00', 'Creamy Arborio rice with wild mushrooms.'),
+  ]},
+  { key: 'desserts', label: 'DOLCI', title: 'Desserts', items: [
+    DISH('desserts', 0, 'Tiramisu', '$7.50', 'Classic Italian dessert with mascarpone.'),
+    DISH('desserts', 1, 'Cheesecake', '$7.00', 'Creamy cheesecake with berry compote.'),
+  ]},
+  { key: 'beverages', label: 'BEVANDE', title: 'Beverages', items: [
+    DISH('beverages', 0, 'Red Wine (Glass)', '$10.00', 'A selection of Italian reds.'),
+    DISH('beverages', 1, 'White Wine (Glass)', '$9.00', 'Crisp and refreshing.'),
+    DISH('beverages', 2, 'Craft Beer', '$6.00', 'Local artisan brews.'),
+    DISH('beverages', 3, 'Espresso', '$3.00', 'Strong and aromatic.'),
+  ]},
+];
+
+const FEATURED = [
+  { imgId: 'home-feat-0', name: 'Ribeye Steak', price: '$28.00', desc: '12 oz prime cut, garlic mashed potatoes.', src: 'assets/gallery-ribeye.webp' },
+  { imgId: 'home-feat-1', name: 'Grilled Salmon', price: '$22.00', desc: 'Lemon butter sauce, seasonal vegetables.' },
+  { imgId: 'home-feat-2', name: 'Tiramisu', price: '$7.50', desc: 'Classic Italian dessert with mascarpone.' },
+];
+
+const GALLERY = [
+  { id: 'gal-0', src: 'assets/gallery-interior.webp', placeholder: 'dining room interior photo', caption: 'The Dining Room' },
+  { id: 'gal-1', src: 'assets/gallery-ribeye.webp', placeholder: 'ribeye steak plated photo', caption: 'Ribeye Steak' },
+  { id: 'gal-2', src: 'assets/gallery-event.webp', placeholder: 'private event photo', caption: 'A Private Celebration' },
+  { id: 'gal-3', placeholder: 'restaurant exterior facade photo', caption: 'Our Entrance' },
+  { id: 'gal-4', placeholder: 'bruschetta appetizer plating photo', caption: 'Bruschetta' },
+  { id: 'gal-5', placeholder: 'wine cellar photo', caption: 'The Wine Cellar' },
+  { id: 'gal-6', placeholder: 'chef working in kitchen photo', caption: 'Behind the Pass' },
+  { id: 'gal-7', placeholder: 'tiramisu dessert photo', caption: 'Tiramisu' },
+];
+
+const AWARDS = [
+  { name: 'Culinary Excellence Award', year: '2022' },
+  { name: 'Restaurant of the Year', year: '2023' },
+  { name: 'Best Fine Dining Experience — Foodie Magazine', year: '2023' },
+];
+
+const REVIEWS = [
+  { quote: 'Exceptional ambiance and unforgettable flavors.', source: 'Gourmet Review' },
+  { quote: 'A must-visit restaurant for food enthusiasts.', source: 'The Daily Bite' },
+];
+
+class Component extends DCLogic {
+  state = {
+    page: 'home',
+    form: { date: '', hour: '', guests: '2', name: '', email: '', phone: '' },
+    resSubmitted: false,
+    resError: false,
+    assignedTable: null,
+    newsletterEmail: '',
+    subscribed: false,
+    lightboxIdx: null,
+  };
+
+  go(page, anchor) {
+    const changed = this.state.page !== page;
+    if (changed) this.setState({ page });
+    if (anchor) setTimeout(() => { const el = document.getElementById(anchor); if (el) el.scrollIntoView({ block: 'start' }); }, 60);
+    else if (changed) window.scrollTo(0, 0);
+  }
+
+  submitReservation(e) {
+    e.preventDefault();
+    const f = this.state.form;
+    if (!f.name.trim() || !f.email.trim() || !f.date || !f.hour) {
+      this.setState({ resError: true });
+      return;
+    }
+    const table = Math.floor(Math.random() * 30) + 1;
+    this.setState({ resSubmitted: true, resError: false, assignedTable: table });
+  }
+
+  submitNewsletter(e) {
+    e.preventDefault();
+    this.setState({ subscribed: true });
+  }
+
+  openLightbox(idx) { this.setState({ lightboxIdx: idx }); }
+  closeLightbox() { this.setState({ lightboxIdx: null }); }
+  shiftLightbox(dir) {
+    this.setState(s => ({ lightboxIdx: (s.lightboxIdx + dir + GALLERY.length) % GALLERY.length }));
+  }
+
+  renderVals() {
+    const page = this.state.page;
+    const linkFor = (label, target, anchor, highlight) => ({
+      label, onClick: () => this.go(target, anchor),
+      style: {
+        cursor: 'pointer', fontSize: '12px', letterSpacing: '1.5px', color: highlight ? '#c8a97e' : '#cfc9c0',
+        borderBottom: highlight ? '1px solid #c8a97e' : '1px solid transparent', paddingBottom: '4px',
+      },
+    });
+
+    const idx = this.state.lightboxIdx;
+    const lightboxImg = idx != null ? GALLERY[idx] : null;
+
+    return {
+      isHome: page === 'home',
+      isMenu: page === 'menu',
+      isReservations: page === 'reservations',
+      isAbout: page === 'about',
+      isGallery: page === 'gallery',
+      navLinks: [
+        linkFor('HOME', 'home', null, page === 'home'),
+        linkFor('MENU', 'menu', null, page === 'menu'),
+        linkFor('RESERVATIONS', 'reservations', null, page === 'reservations'),
+        linkFor('ABOUT US', 'about', null, page === 'about'),
+        linkFor('GALLERY', 'gallery', null, page === 'gallery'),
+      ],
+      menuCategories: CATEGORIES,
+      featuredDishes: FEATURED,
+      galleryImages: GALLERY.map((g, i) => ({ ...g, onOpen: () => this.openLightbox(i) })),
+      awards: AWARDS,
+      reviews: REVIEWS,
+      goHome: () => this.go('home'),
+      goMenu: () => this.go('menu'),
+      goReserve: () => this.go('reservations'),
+      goAbout: () => this.go('about'),
+      goGallery: () => this.go('gallery'),
+      form: this.state.form,
+      setDate: (e) => this.setState(s => ({ form: { ...s.form, date: e.target.value } })),
+      setHour: (e) => this.setState(s => ({ form: { ...s.form, hour: e.target.value } })),
+      setGuests: (e) => this.setState(s => ({ form: { ...s.form, guests: e.target.value } })),
+      setName: (e) => this.setState(s => ({ form: { ...s.form, name: e.target.value } })),
+      setEmailField: (e) => this.setState(s => ({ form: { ...s.form, email: e.target.value } })),
+      setPhone: (e) => this.setState(s => ({ form: { ...s.form, phone: e.target.value } })),
+      resSubmitted: this.state.resSubmitted,
+      resNotSubmitted: !this.state.resSubmitted,
+      resError: this.state.resError,
+      assignedTable: this.state.assignedTable,
+      submitReservation: (e) => this.submitReservation(e),
+      newsletterEmail: this.state.newsletterEmail,
+      setNewsletterEmail: (e) => this.setState({ newsletterEmail: e.target.value }),
+      subscribed: this.state.subscribed,
+      notSubscribed: !this.state.subscribed,
+      submitNewsletter: (e) => this.submitNewsletter(e),
+      lightboxOpen: idx != null,
+      lightboxImageId: lightboxImg ? 'lb-' + lightboxImg.id : '',
+      lightboxSrc: lightboxImg ? lightboxImg.src : undefined,
+      lightboxPlaceholder: lightboxImg ? lightboxImg.placeholder : '',
+      closeLightbox: () => this.closeLightbox(),
+      prevLightbox: () => this.shiftLightbox(-1),
+      nextLightbox: () => this.shiftLightbox(1),
+      stop: (e) => e.stopPropagation(),
+      year: new Date().getFullYear(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>
