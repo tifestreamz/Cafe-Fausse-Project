@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { Slot } from "../components/Media";
 import PageHero from "../components/PageHero";
-import { MENU_CATEGORIES } from "../data/content";
+import { IMAGES, MENU_CATEGORIES } from "../data/content";
 
 export default function Menu() {
   return (
     <div>
-      <PageHero placeholder="table setting photo" eyebrow="LA CUCINA" title="Our Menu" height={360} />
+      <PageHero src={IMAGES.menuHero} eyebrow="LA CUCINA" title="Our Menu" height={360} />
 
       {MENU_CATEGORIES.map((cat) => (
         <div key={cat.key} id={cat.key} className="container" style={{ padding: "80px 24px 20px", textAlign: "center" }}>

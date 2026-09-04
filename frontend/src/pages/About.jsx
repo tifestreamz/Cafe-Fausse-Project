@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { Slot } from "../components/Media";
 import PageHero from "../components/PageHero";
-import { ABOUT_STORY, FOUNDERS } from "../data/content";
+import { ABOUT_STORY, FOUNDERS, IMAGES } from "../data/content";
 
 export default function About() {
   const [antonio, maria] = FOUNDERS;
 
   return (
     <div>
-      <PageHero placeholder="dining room ambience photo" eyebrow="SINCE 2010" title="About Us" height={360} />
+      <PageHero src={IMAGES.aboutHero} eyebrow="SINCE 2010" title="About Us" height={360} />
 
       <div className="container" style={{ maxWidth: "900px", padding: "100px 24px 0", textAlign: "center" }}>
         <div className="eyebrow">ABOUT CAFÉ FAUSSE</div>
@@ -22,7 +22,7 @@ export default function About() {
         className="container"
         style={{ padding: "90px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "60px", alignItems: "center" }}
       >
-        <Slot placeholder={antonio.placeholder} style={{ width: "100%", height: "440px" }} />
+        <Slot src={antonio.src} alt={antonio.name} style={{ width: "100%", height: "440px" }} />
         <div>
           <div className="eyebrow">THE FOUNDERS</div>
           <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "32px", color: "var(--text-heading)", margin: "16px 0 20px", fontWeight: 500 }}>
@@ -43,7 +43,7 @@ export default function About() {
           </h2>
           <div style={{ color: "var(--text-muted)", fontSize: "15px", lineHeight: 1.8 }}>{maria.bio}</div>
         </div>
-        <Slot placeholder={maria.placeholder} style={{ width: "100%", height: "440px", order: 2 }} />
+        <Slot src={maria.src} alt={maria.name} style={{ width: "100%", height: "440px", order: 2 }} />
       </div>
 
       <div style={{ textAlign: "center", paddingBottom: "110px" }}>

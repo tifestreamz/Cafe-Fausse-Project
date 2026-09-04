@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PageHero from "../components/PageHero";
-import { CONTACT } from "../data/content";
+import { CONTACT, IMAGES } from "../data/content";
 import { createReservation } from "../api";
 
 const fieldStyle = {
@@ -44,7 +44,7 @@ export default function Reservations() {
 
   return (
     <div>
-      <PageHero title="Reservations" height={300} />
+      <PageHero src={IMAGES.reservationsHero} title="Reservations" height={300} />
 
       <div
         className="container"

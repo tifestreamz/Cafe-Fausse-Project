@@ -69,7 +69,7 @@ export default function Home() {
           alignItems: "center",
         }}
       >
-        <Slot placeholder="chef plating dish photo" style={{ width: "100%", height: "440px" }} />
+        <Slot src={IMAGES.storyChefPlating} alt="Chef plating dish" style={{ width: "100%", height: "440px" }} />
         <div>
           <div className="eyebrow">OUR STORY</div>
           <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "36px", color: "var(--text-heading)", margin: "16px 0 20px", fontWeight: 500 }}>
