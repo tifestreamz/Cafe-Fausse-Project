@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PageHero from "../components/PageHero";
 import { CONTACT, IMAGES } from "../data/content";
-import { createReservation } from "../api";
+import { createReservation, getAvailability } from "../api";
 
 const MONTH_NAMES = [
   "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
@@ -42,6 +42,46 @@ export default function Reservations() {
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
   const [errorMsg, setErrorMsg] = useState("");
   const [assignedTable, setAssignedTable] = useState(null);
+
+  // FR-7: Real-time table and slot availability state
+  const [availabilityMap, setAvailabilityMap] = useState({});
+  const [loadingAvailability, setLoadingAvailability] = useState(false);
+  const [slotPrompt, setSlotPrompt] = useState(null); // { time, alternatives }
+
+  // Query availability whenever selectedDate changes
+  useEffect(() => {
+    let isMounted = true;
+
+    getAvailability(selectedDate)
+      .then((data) => {
+        if (!isMounted) return;
+        const map = {};
+        (data.slots || []).forEach((s) => {
+          map[s.time] = s;
+        });
+        setAvailabilityMap(map);
+        setLoadingAvailability(false);
+
+        // Validate currently selected time slot for this date
+        const currentSlotInfo = map[selectedTime];
+        if (currentSlotInfo && !currentSlotInfo.available) {
+          const openSlots = (data.slots || []).filter((s) => s.available).map((s) => s.time);
+          setSlotPrompt({
+            time: selectedTime,
+            alternatives: openSlots,
+          });
+        } else {
+          setSlotPrompt(null);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setLoadingAvailability(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedDate, selectedTime]);
 
   // Month navigation
   function prevMonth() {
@@ -89,11 +129,34 @@ export default function Reservations() {
     return days;
   }, [selectedYear, selectedMonth, daysInMonth, firstDayIndex, today]);
 
+  function handleSelectDate(dateKey) {
+    setSelectedDate(dateKey);
+    setLoadingAvailability(true);
+  }
+
+  function selectAvailableSlot(slot) {
+    setSelectedTime(slot);
+    setSlotPrompt(null);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !selectedDate || !selectedTime) {
       setStatus("error");
       setErrorMsg("Please provide your name, email, date, and preferred time to reserve.");
+      return;
+    }
+
+    // Client check against cached availability
+    const slotInfo = availabilityMap[selectedTime];
+    if (slotInfo && !slotInfo.available) {
+      const openSlots = Object.values(availabilityMap).filter((s) => s.available).map((s) => s.time);
+      setSlotPrompt({
+        time: selectedTime,
+        alternatives: openSlots,
+      });
+      setStatus("error");
+      setErrorMsg(`Sorry, the ${selectedTime} slot is fully booked for ${selectedDate}. Please select an alternative time below.`);
       return;
     }
 
@@ -118,6 +181,12 @@ export default function Reservations() {
     } catch (err) {
       setStatus("error");
       setErrorMsg(err.message || "Failed to complete reservation. Please try another time.");
+      if (err.alternatives && err.alternatives.length > 0) {
+        setSlotPrompt({
+          time: selectedTime,
+          alternatives: err.alternatives.map((a) => a.time || a),
+        });
+      }
     }
   }
 
@@ -125,6 +194,7 @@ export default function Reservations() {
     setStatus("idle");
     setAssignedTable(null);
     setErrorMsg("");
+    setSlotPrompt(null);
   }
 
   return (
@@ -440,7 +510,7 @@ export default function Reservations() {
                             key={item.key}
                             type="button"
                             disabled={item.disabled}
-                            onClick={() => setSelectedDate(item.dateKey)}
+                            onClick={() => handleSelectDate(item.dateKey)}
                             className={`cal-day-btn ${isSelected ? "selected" : ""}`}
                           >
                             {item.day}
@@ -453,36 +523,146 @@ export default function Reservations() {
 
                 {/* 3. Time Slots */}
                 <div>
-                  <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "20px", color: "var(--text-heading)", margin: "0 0 14px", fontWeight: 500 }}>
-                    Time
-                  </h3>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                    <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "20px", color: "var(--text-heading)", margin: 0, fontWeight: 500 }}>
+                      Seating Time
+                    </h3>
+                    <span style={{ fontSize: "11px", letterSpacing: "1px", color: "var(--gold)", textTransform: "uppercase" }}>
+                      {loadingAvailability ? "Checking capacity..." : "30 Tables Total"}
+                    </span>
+                  </div>
+
+                  {/* FR-7: Prompt user to choose an alternative when selected slot is unavailable */}
+                  {slotPrompt && (
+                    <div
+                      style={{
+                        background: "rgba(200, 169, 126, 0.08)",
+                        border: "1px solid var(--gold)",
+                        borderRadius: "10px",
+                        padding: "16px",
+                        marginBottom: "16px",
+                        animation: "fadeIn 0.25s ease-out",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--gold)", fontWeight: 600, fontSize: "13px", marginBottom: "6px" }}>
+                        <span>⚠️</span>
+                        <span>The {slotPrompt.time} seating is fully booked on {selectedDate}</span>
+                      </div>
+                      <p style={{ color: "#d2ccc2", fontSize: "12px", lineHeight: 1.5, margin: "0 0 12px" }}>
+                        All 30 tables are reserved for this slot. Please select one of our available alternative seatings:
+                      </p>
+                      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                        {slotPrompt.alternatives && slotPrompt.alternatives.length > 0 ? (
+                          slotPrompt.alternatives.slice(0, 5).map((alt) => (
+                            <button
+                              key={alt}
+                              type="button"
+                              onClick={() => selectAvailableSlot(alt)}
+                              style={{
+                                background: "#1c1813",
+                                border: "1px solid var(--gold)",
+                                color: "var(--gold)",
+                                padding: "6px 14px",
+                                borderRadius: "6px",
+                                fontSize: "12px",
+                                fontWeight: 600,
+                                cursor: "pointer",
+                                transition: "all 0.15s ease",
+                              }}
+                            >
+                              Switch to {alt} →
+                            </button>
+                          ))
+                        ) : (
+                          <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                            No remaining tables on this date. Please choose another date on the calendar.
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(auto-fill, minmax(78px, 1fr))",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(88px, 1fr))",
                       gap: "10px",
                     }}
                   >
                     {TIME_SLOTS.map((slot) => {
-                      const isSelected = selectedTime === slot;
+                      const slotInfo = availabilityMap[slot];
+                      const isAvailable = slotInfo ? slotInfo.available : true;
+                      const tablesRemaining = slotInfo ? slotInfo.tables_remaining : null;
+                      const isSelected = selectedTime === slot && isAvailable;
+                      const isLowCapacity = isAvailable && tablesRemaining !== null && tablesRemaining <= 5 && tablesRemaining > 0;
+
                       return (
                         <button
                           key={slot}
                           type="button"
-                          onClick={() => setSelectedTime(slot)}
+                          disabled={!isAvailable}
+                          onClick={() => selectAvailableSlot(slot)}
+                          title={
+                            !isAvailable
+                              ? "Fully booked (0 tables remaining)"
+                              : tablesRemaining !== null
+                              ? `${tablesRemaining} tables available`
+                              : "Available"
+                          }
                           style={{
-                            padding: "10px 4px",
+                            padding: "8px 4px 6px",
                             borderRadius: "8px",
-                            border: isSelected ? "1px solid var(--gold)" : "1px solid rgba(200, 169, 126, 0.2)",
-                            background: isSelected ? "var(--gold)" : "#181410",
-                            color: isSelected ? "#0a0908" : "#e0dbd1",
-                            fontSize: "13px",
-                            fontWeight: isSelected ? 700 : 500,
-                            cursor: "pointer",
+                            border: !isAvailable
+                              ? "1px dashed rgba(255, 255, 255, 0.12)"
+                              : isSelected
+                              ? "1px solid var(--gold)"
+                              : "1px solid rgba(200, 169, 126, 0.2)",
+                            background: !isAvailable
+                              ? "#12100e"
+                              : isSelected
+                              ? "var(--gold)"
+                              : "#181410",
+                            color: !isAvailable
+                              ? "#605b54"
+                              : isSelected
+                              ? "#0a0908"
+                              : "#e0dbd1",
+                            cursor: !isAvailable ? "not-allowed" : "pointer",
                             transition: "all 0.15s ease",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            opacity: !isAvailable ? 0.55 : 1,
                           }}
                         >
-                          {slot}
+                          <span
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: isSelected ? 700 : 600,
+                              textDecoration: !isAvailable ? "line-through" : "none",
+                            }}
+                          >
+                            {slot}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "9px",
+                              letterSpacing: "0.5px",
+                              marginTop: "2px",
+                              fontWeight: 600,
+                              color: !isAvailable
+                                ? "#a34b4b"
+                                : isSelected
+                                ? "#2b2112"
+                                : isLowCapacity
+                                ? "#e8ad5b"
+                                : "rgba(200, 169, 126, 0.7)",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {!isAvailable ? "Sold Out" : isLowCapacity ? `${tablesRemaining} Left` : "Available"}
+                          </span>
                         </button>
                       );
                     })}

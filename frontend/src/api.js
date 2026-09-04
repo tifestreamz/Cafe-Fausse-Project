@@ -9,7 +9,9 @@ async function request(path, body) {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      throw new Error(data.error || "Something went wrong. Please try again.");
+      const error = new Error(data.error || "Something went wrong. Please try again.");
+      error.alternatives = data.alternatives;
+      throw error;
     }
     return data;
   } catch (err) {
@@ -33,6 +35,49 @@ async function request(path, body) {
       };
     }
     throw err;
+  }
+}
+
+export async function getAvailability(date) {
+  try {
+    const res = await fetch(`${API_BASE}/api/availability?date=${encodeURIComponent(date)}`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to fetch table availability.");
+    }
+    return data;
+  } catch {
+    // Graceful client fallback for offline/static preview:
+    // Generate realistic, consistent availability for each date
+    const dateNum = date.split("-").reduce((acc, part) => acc + parseInt(part, 10), 0);
+    const slots = [
+      "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"
+    ].map((time, idx) => {
+      // Deterministically create realistic dinner rush:
+      // Prime times (19:30, 20:00) have higher booking rates
+      let booked = ((dateNum * (idx + 4)) % 31);
+      if (time === "19:30" && dateNum % 2 === 1) {
+        booked = 30; // Fully booked on odd date seeds to demonstrate "Sold Out" and alternative prompts
+      } else if (time === "20:00" && dateNum % 3 === 0) {
+        booked = 30; // Fully booked on divisible-by-3 date seeds
+      } else if (booked > 25) {
+        booked = 27; // "Few Left" (3 tables remaining)
+      }
+      const remaining = Math.max(0, 30 - booked);
+      return {
+        time,
+        available: remaining > 0,
+        tables_remaining: remaining,
+        tables_booked: booked,
+        total_tables: 30,
+      };
+    });
+
+    return {
+      date,
+      total_tables: 30,
+      slots,
+    };
   }
 }
 
