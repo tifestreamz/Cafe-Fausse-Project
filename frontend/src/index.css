@@ -134,3 +134,56 @@ img {
   background: transparent;
   color: var(--gold);
 }
+
+.menu-item-interactive:hover {
+  background: rgba(200, 169, 126, 0.05);
+  transform: translateY(-2px);
+  border-bottom-color: rgba(200, 169, 126, 0.4) !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.cal-day-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #cfc9c0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin: 0 auto;
+}
+
+.cal-day-btn:hover:not(:disabled) {
+  background: rgba(200, 169, 126, 0.2);
+  color: #fff;
+  border-color: rgba(200, 169, 126, 0.4);
+}
+
+.cal-day-btn.selected {
+  background: var(--gold) !important;
+  color: #0a0908 !important;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(200, 169, 126, 0.45);
+}
+
+.cal-day-btn:disabled {
+  color: rgba(140, 130, 115, 0.25);
+  cursor: not-allowed;
+}
+

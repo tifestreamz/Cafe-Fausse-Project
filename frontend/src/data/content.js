@@ -62,7 +62,18 @@ export const IMAGES = {
   galleryEntrance,
 };
 
-const dish = (name, price, desc, src) => ({ name, price, desc, src });
+const dish = (id, name, price, desc, src, category, details, ingredients, dietary, pairing) => ({
+  id,
+  name,
+  price,
+  desc,
+  src,
+  category,
+  details: details || desc,
+  ingredients: ingredients || [],
+  dietary: dietary || [],
+  pairing: pairing || null,
+});
 
 export const MENU_CATEGORIES = [
   {
@@ -70,8 +81,30 @@ export const MENU_CATEGORIES = [
     label: "ANTIPASTI",
     title: "Starters",
     items: [
-      dish("Bruschetta", "$8.50", "Fresh tomatoes, basil, olive oil, and toasted baguette slices.", IMAGES.dishBruschetta),
-      dish("Caesar Salad", "$9.00", "Crisp romaine with homemade Caesar dressing.", IMAGES.dishCaesarSalad),
+      dish(
+        "bruschetta",
+        "Bruschetta",
+        "$8.50",
+        "Fresh tomatoes, basil, olive oil, and toasted baguette slices.",
+        IMAGES.dishBruschetta,
+        "ANTIPASTI",
+        "Heirloom tomatoes marinated in first-press Sicilian olive oil and hand-torn sweet basil, piled high over garlic-rubbed grilled artisan sourdough with a 12-year aged Modena balsamic reduction.",
+        ["Grilled rustic sourdough", "Vine-ripened Roma tomatoes", "Fresh sweet basil", "Garlic confit", "Aged Modena balsamic glaze", "Sicilian EVOO"],
+        ["Vegetarian", "Dairy-Free"],
+        "Pinot Grigio delle Venezie"
+      ),
+      dish(
+        "caesar-salad",
+        "Caesar Salad",
+        "$9.00",
+        "Crisp romaine with homemade Caesar dressing.",
+        IMAGES.dishCaesarSalad,
+        "ANTIPASTI",
+        "Crisp organic baby romaine hearts tossed in our signature emulsion with white anchovies, topped with delicate ribbons of 24-month Parmigiano-Reggiano and warm rosemary-garlic croutons.",
+        ["Baby romaine hearts", "24-month Parmigiano-Reggiano", "Housemade focaccia croutons", "Anchovy-garlic emulsion", "Cracked Tellicherry pepper"],
+        ["House Classic"],
+        "Gavi di Gavi"
+      ),
     ],
   },
   {
@@ -79,9 +112,42 @@ export const MENU_CATEGORIES = [
     label: "SECONDI",
     title: "Main Courses",
     items: [
-      dish("Grilled Salmon", "$22.00", "Served with lemon butter sauce and seasonal vegetables.", IMAGES.dishSalmon),
-      dish("Ribeye Steak", "$28.00", "12 oz prime cut with garlic mashed potatoes.", IMAGES.galleryRibeye),
-      dish("Vegetable Risotto", "$18.00", "Creamy Arborio rice with wild mushrooms.", IMAGES.dishRisotto),
+      dish(
+        "salmon",
+        "Grilled Salmon",
+        "$22.00",
+        "Served with lemon butter sauce and seasonal vegetables.",
+        IMAGES.dishSalmon,
+        "SECONDI",
+        "Pan-seared wild Atlantic salmon fillet with crispy golden skin, resting alongside tender charred asparagus spears and roasted baby carrots, bathed in a velvety lemon-herb butter sauce.",
+        ["Wild-caught Atlantic salmon", "Charred asparagus", "Lemon-thyme velouté", "Roasted heirloom carrots", "Sea salt crystals"],
+        ["Gluten-Free", "Rich in Omega-3"],
+        "Chardonnay or Crisp Vermentino"
+      ),
+      dish(
+        "ribeye",
+        "Ribeye Steak",
+        "$28.00",
+        "12 oz prime cut with garlic mashed potatoes.",
+        IMAGES.galleryRibeye,
+        "SECONDI",
+        "Prime 12 oz USDA beef cut grilled to temperature over hardwood embers, served over silky roasted garlic Yukon Gold mashed potatoes and drizzled with a rich Chianti wine demi-glace.",
+        ["12 oz USDA Prime Ribeye", "Yukon Gold garlic purée", "Rosemary compound butter", "Charred shallots", "Red wine reduction"],
+        ["Gluten-Free", "Chef's Signature"],
+        "Barolo DOCG or Chianti Classico"
+      ),
+      dish(
+        "risotto",
+        "Vegetable Risotto",
+        "$18.00",
+        "Creamy Arborio rice with wild mushrooms.",
+        IMAGES.dishRisotto,
+        "SECONDI",
+        "Slow-simmered Carnaroli rice folded with pan-roasted wild porcini and cremini mushrooms, enriched with vegetable fumet, cold-pressed olive oil, and aged Parmigiano-Reggiano with black truffle essence.",
+        ["Aged Carnaroli rice", "Wild porcini & cremini mushrooms", "White wine broth", "Pecorino Romano", "Black truffle oil"],
+        ["Vegetarian", "Gluten-Free"],
+        "Nebbiolo or Pinot Nero"
+      ),
     ],
   },
   {
@@ -89,8 +155,30 @@ export const MENU_CATEGORIES = [
     label: "DOLCI",
     title: "Desserts",
     items: [
-      dish("Tiramisu", "$7.50", "Classic Italian dessert with mascarpone.", IMAGES.dishTiramisu),
-      dish("Cheesecake", "$7.00", "Creamy cheesecake with berry compote.", IMAGES.dishCheesecake),
+      dish(
+        "tiramisu",
+        "Tiramisu",
+        "$7.50",
+        "Classic Italian dessert with mascarpone.",
+        IMAGES.dishTiramisu,
+        "DOLCI",
+        "The quintessential Italian dolce. Delicate Savoiardi ladyfingers soaked in freshly brewed Illy espresso and Marsala wine, layered with airy whipped mascarpone cream and finished with Valrhona cocoa.",
+        ["Imported Savoiardi ladyfingers", "Illy espresso", "Whipped mascarpone zabaglione", "Valrhona dark cocoa", "Marsala wine"],
+        ["Vegetarian", "Traditional Recipe"],
+        "Vin Santo or Espresso Romano"
+      ),
+      dish(
+        "cheesecake",
+        "Cheesecake",
+        "$7.00",
+        "Creamy cheesecake with berry compote.",
+        IMAGES.dishCheesecake,
+        "DOLCI",
+        "Silky baked Italian ricotta cheesecake infused with fresh lemon zest on a toasted honey-graham crust, topped with a luscious coulis of simmered blackberries and wild raspberries.",
+        ["Fresh Italian ricotta", "Graham butter crust", "Macerated blackberries & raspberries", "Wild berry coulis", "Candied lemon peel"],
+        ["Vegetarian"],
+        "Moscato d'Asti"
+      ),
     ],
   },
   {
@@ -98,18 +186,62 @@ export const MENU_CATEGORIES = [
     label: "BEVANDE",
     title: "Beverages",
     items: [
-      dish("Red Wine (Glass)", "$10.00", "A selection of Italian reds.", IMAGES.bevRedWine),
-      dish("White Wine (Glass)", "$9.00", "Crisp and refreshing.", IMAGES.bevWhiteWine),
-      dish("Craft Beer", "$6.00", "Local artisan brews.", IMAGES.bevCraftBeer),
-      dish("Espresso", "$3.00", "Strong and aromatic.", IMAGES.bevEspresso),
+      dish(
+        "red-wine",
+        "Red Wine (Glass)",
+        "$10.00",
+        "A selection of Italian reds.",
+        IMAGES.bevRedWine,
+        "BEVANDE",
+        "Curated glass pour of premium Tuscan Sangiovese and Piedmontese varietals, displaying bold notes of black cherry, sun-dried plums, violet, and polished oak tannins.",
+        ["100% Sangiovese / Super Tuscan blend", "Aged in French oak barriques"],
+        ["Vegan", "Organic Selection"],
+        "Pairs with Ribeye & Antipasti"
+      ),
+      dish(
+        "white-wine",
+        "White Wine (Glass)",
+        "$9.00",
+        "Crisp and refreshing.",
+        IMAGES.bevWhiteWine,
+        "BEVANDE",
+        "Vibrant, bone-dry Northern Italian white featuring delicate aromas of golden apple, honeysuckle, and crushed wet stone with a lively, refreshing citrus finish.",
+        ["Northern Italian Pinot Grigio & Friuli varietals"],
+        ["Vegan", "Organic Selection"],
+        "Pairs with Grilled Salmon & Risotto"
+      ),
+      dish(
+        "craft-beer",
+        "Craft Beer",
+        "$6.00",
+        "Local artisan brews.",
+        IMAGES.bevCraftBeer,
+        "BEVANDE",
+        "Rotating craft taps showcasing the finest independent artisanal breweries from the greater Washington DC area, poured cold with a rich, aromatic head.",
+        ["Local artisan hops", "Malted barley", "Washington craft brewery selection"],
+        ["Artisan Brew"],
+        "Pairs with Bruschetta & Starters"
+      ),
+      dish(
+        "espresso",
+        "Espresso",
+        "$3.00",
+        "Strong and aromatic.",
+        IMAGES.bevEspresso,
+        "BEVANDE",
+        "Single-origin Italian roast pulled with precise temperature and pressure, presenting a thick golden crema, dark chocolate undertones, and an enduring velvet finish.",
+        ["Single-origin Arabica & Robusta Italian roast"],
+        ["Gluten-Free", "Zero Sugar"],
+        "Perfect conclusion to your meal"
+      ),
     ],
   },
 ];
 
 export const FEATURED_DISHES = [
-  { name: "Ribeye Steak", price: "$28.00", desc: "12 oz prime cut, garlic mashed potatoes.", src: IMAGES.galleryRibeye },
-  { name: "Grilled Salmon", price: "$22.00", desc: "Lemon butter sauce, seasonal vegetables.", src: IMAGES.dishSalmon },
-  { name: "Tiramisu", price: "$7.50", desc: "Classic Italian dessert with mascarpone.", src: IMAGES.dishTiramisu },
+  MENU_CATEGORIES[1].items[1], // Ribeye Steak
+  MENU_CATEGORIES[1].items[0], // Grilled Salmon
+  MENU_CATEGORIES[2].items[0], // Tiramisu
 ];
 
 export const GALLERY_IMAGES = [
