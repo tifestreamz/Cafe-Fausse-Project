@@ -23,13 +23,8 @@ The development of Café Fausse leveraged an agentic, multi-modal AI pair progra
 
 ## 2. How AI Tooling Was Applied
 
-### A. Requirements Mapping & Gap Analysis
-- **SRS Ingestion**: The agent ingested the full Software Requirements Specification (`project/uploads/MSEE_Web_Application_and_Interface_Design_Cafe_Fausse_SRS.pdf`) and mapped functional requirements (FR-1 through FR-7) against the initial Claude mockup.
-- **Missing Feature Identification**: The AI successfully identified that while basic booking inputs existed in the static mockup, crucial requirements were missing:
-  1. An interactive dish exploration modal with ingredient lists and sommelier wine pairings.
-  2. A visual calendar date picker enforcing booking rules.
-  3. FR-7 real-time table availability checking with slot capacity tags (`Few Left`, `Sold Out`) and alternative slot recommendation banners.
-  4. An administrative management portal (`/admin`) for dining room oversight and table management.
+### A. Requirements Mapping
+- **SRS Ingestion**: The agent ingested the full Software Requirements Specification (`project/uploads/MSEE_Web_Application_and_Interface_Design_Cafe_Fausse_SRS.pdf`) and mapped functional requirements (FR-1 through FR-7) to guide system architecture and component design.
 
 ### B. Full-Stack Implementation
 - **Interactive Menu Component**: Built a modal dialog system in `frontend/src/pages/Menu.jsx` with keyboard escape listeners, body scroll locks, wine pairing highlights, and responsive layouts.
