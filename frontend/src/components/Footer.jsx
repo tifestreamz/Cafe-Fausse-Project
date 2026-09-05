@@ -119,9 +119,27 @@ export default function Footer() {
           borderTop: "1px solid var(--gold-border-soft)",
           color: "var(--text-faint)",
           fontSize: "12px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "14px",
+          flexWrap: "wrap",
         }}
       >
-        © {new Date().getFullYear()} Café Fausse. All rights reserved.
+        <span>© {new Date().getFullYear()} Café Fausse. All rights reserved.</span>
+        <span>·</span>
+        <Link
+          to="/admin"
+          style={{
+            color: "var(--text-faint)",
+            textDecoration: "none",
+            transition: "color 0.2s ease",
+          }}
+          onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
+          onMouseLeave={(e) => (e.target.style.color = "var(--text-faint)")}
+        >
+          Staff &amp; Manager Portal
+        </Link>
       </div>
     </div>
   );

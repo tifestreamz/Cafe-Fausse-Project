@@ -15,6 +15,16 @@ class Customer(db.Model):
 
     reservations = db.relationship("Reservation", back_populates="customer")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "phone": self.phone,
+            "newsletter_signup": self.newsletter_signup,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
 
 class Reservation(db.Model):
     __tablename__ = "reservations"
@@ -31,3 +41,19 @@ class Reservation(db.Model):
     __table_args__ = (
         db.UniqueConstraint("time_slot", "table_number", name="uq_slot_table"),
     )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "customer_id": self.customer_id,
+            "guest_name": self.customer.name if self.customer else "Guest",
+            "email": self.customer.email if self.customer else "",
+            "phone": self.customer.phone if self.customer else "",
+            "time_slot": self.time_slot.isoformat() if self.time_slot else None,
+            "date": self.time_slot.strftime("%Y-%m-%d") if self.time_slot else None,
+            "hour": self.time_slot.strftime("%H:%M") if self.time_slot else None,
+            "guests": self.guests,
+            "table_number": self.table_number,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+

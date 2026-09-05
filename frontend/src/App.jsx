@@ -5,6 +5,7 @@ import Menu from "./pages/Menu";
 import Reservations from "./pages/Reservations";
 import About from "./pages/About";
 import Gallery from "./pages/Gallery";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="reservations" element={<Reservations />} />
         <Route path="about" element={<About />} />
         <Route path="gallery" element={<Gallery />} />
+        <Route path="admin" element={<Admin />} />
       </Route>
     </Routes>
   );
