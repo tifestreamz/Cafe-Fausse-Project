@@ -19,9 +19,6 @@ The development of Café Fausse leveraged an agentic, multi-modal AI pair progra
 3. **Generative Image & Asset Tooling**:
    - Used to generate high-resolution culinary photography and ambiance assets matching the fine-dining Michelin-starred Italian aesthetic specified in the project requirements.
 
-4. **Static Analysis & Linting Automation (`oxlint` & Vite)**:
-   - Integrated with AI-driven iterative loops to enforce zero-warning, zero-error code quality and strict syntax hygiene.
-
 ---
 
 ## 2. How AI Tooling Was Applied
@@ -91,6 +88,6 @@ The development of Café Fausse leveraged an agentic, multi-modal AI pair progra
 
 ## 5. Key Best Practices for AI-Assisted Engineering
 
-1. **Test Continuously with Linters and Compilers**: Running `oxlint` and `npm run build` after every AI edit caught syntax issues immediately before they cascaded into larger bugs.
+1. **Test Continuously with Build Verification**: Running production builds (`npm run build`) and compiler checks after every AI edit caught syntax issues immediately before they cascaded into larger bugs.
 2. **Employ Autonomous Browser Verification**: Using automated browser agents to execute real user flows provides ground truth validation that static code inspections cannot match.
 3. **Design for Resilience**: Building a dual-layer synchronization model (where the frontend communicates with PostgreSQL when online, but falls back seamlessly to `localStorage` when offline) ensures high reliability regardless of network conditions.

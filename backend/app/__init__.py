@@ -9,11 +9,10 @@ from .extensions import db
 def create_app():
     app = Flask(__name__)
 
-    database_url = os.environ.get("DATABASE_URL")
-    if not database_url:
-        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        database_url = f"sqlite:///{os.path.join(base_dir, 'cafe_fausse.db')}"
-    elif database_url.startswith("postgres://"):
+    database_url = os.environ.get(
+        "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/cafe_fausse"
+    )
+    if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url

@@ -35,7 +35,7 @@ To inspect the 30-table dining room floor plan, live occupancy, reservation ledg
 
 ## 3. Local Execution Option
 
-The full stack can also be executed completely offline on a local machine:
+The full stack can also be executed on a local machine:
 
 ### Backend (Port 5001)
 ```bash
@@ -45,7 +45,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python run.py
 ```
-*Note: If no external PostgreSQL `DATABASE_URL` is set, the backend automatically initializes a local SQLite database (`backend/cafe_fausse.db`) pre-seeded with sample reservations and subscribers.*
+*Note: Ensure your PostgreSQL `DATABASE_URL` environment variable is configured for database access.*
 
 ### Frontend (Port 5173 / Port 4173)
 ```bash

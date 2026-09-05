@@ -22,7 +22,6 @@ The system is structured as a decoupled, full-stack architecture:
 │   │   ├── routes.py         # API endpoints (Reservations, Availability, Admin, Newsletter)
 │   │   ├── seeds.py          # Demo seed data (initial bookings & subscribers)
 │   │   └── run.py            # Alternate runner for production deployment
-│   ├── cafe_fausse.db        # Automatic local SQLite database fallback
 │   ├── requirements.txt      # Python dependencies (Flask, SQLAlchemy, Gunicorn, psycopg2)
 │   └── run.py                # Local server entry point (Port 5001)
 ├── frontend/                 # React 19 Single Page Application (SPA)
@@ -50,9 +49,7 @@ The system is structured as a decoupled, full-stack architecture:
 ### Core Technologies
 - **Frontend:** React 19, Vite, React Router DOM 7, Lucide Icons (`lucide-react`), Modern Vanilla CSS (CSS Grid, Flexbox, custom CSS custom properties / design tokens, glassmorphism).
 - **Backend:** Python 3.12, Flask 3, Flask-SQLAlchemy, Flask-CORS, Gunicorn.
-- **Database:** Dual-mode persistence:
-  - **Local Development:** Zero-configuration SQLite (`backend/cafe_fausse.db`) created automatically on first run.
-  - **Production:** PostgreSQL on Render/Neon via standard `DATABASE_URL`.
+- **Database:** PostgreSQL (locally or hosted via Render/Neon) managed via SQLAlchemy ORM models.
 - **Iconography:** 100% clean vector line/solid icons from `lucide-react` (no raw emojis).
 
 ---
@@ -95,6 +92,7 @@ The system is structured as a decoupled, full-stack architecture:
 ### Prerequisites
 - **Node.js**: v18.0.0 or later (`node -v`)
 - **Python**: v3.11 or v3.12 (`python3 --version`)
+- **PostgreSQL**: v14 or later (`psql --version`) or hosted PostgreSQL URI
 - **Git**: (`git --version`)
 
 ---
@@ -108,7 +106,7 @@ cd Cafe-Fausse-Project
 
 ---
 
-### Step 2: Backend Setup (Flask & SQLite / PostgreSQL)
+### Step 2: Backend Setup (Flask & PostgreSQL)
 
 1. Navigate to the `backend/` directory:
    ```bash
@@ -131,11 +129,17 @@ cd Cafe-Fausse-Project
    pip install -r requirements.txt
    ```
 
-4. Start the Flask server:
+4. Set your `DATABASE_URL` environment variable:
+   ```bash
+   # Example:
+   export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/cafe_fausse"
+   ```
+
+5. Start the Flask server:
    ```bash
    python run.py
    ```
-   *The backend starts on `http://localhost:5001`. If no `DATABASE_URL` is set, it automatically creates and initializes `cafe_fausse.db` (SQLite) with demo reservation seeds and subscribers.*
+   *The backend starts on `http://localhost:5001` and connects to your PostgreSQL database.*
 
 ---
 
@@ -203,6 +207,5 @@ The database uses SQLAlchemy ORM models defined in [`backend/app/models.py`](bac
 
 ## 6. Testing & Quality Verification
 
-- **Frontend Linter:** Checked with `oxlint` — 0 errors, 0 warnings across all files.
-- **Production Build:** `npm run build` compiles clean production bundle in `<250ms`.
+- **Production Build:** `npm run build` compiles clean production bundle in `<250ms` with zero warnings or errors.
 - **End-to-End Verification:** Automated headless browser sessions verified the entire customer journey from menu exploration to booking, slot validation, table assignment, and admin ledger inspection.
