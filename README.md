@@ -178,20 +178,25 @@ cd Cafe-Fausse-Project
 | `GET` | `/api/admin/tables` | 30-table occupancy for given slot | `?date=YYYY-MM-DD&hour=HH:MM` |
 | `GET` | `/api/admin/reservations` | Retrieve reservations ledger | `?date=YYYY-MM-DD` (optional date filter) |
 | `DELETE` | `/api/admin/reservations/<id>` | Cancel reservation & free table | Path variable `id` |
+| `GET` | `/api/admin/customers` | Retrieve dining patrons list | None |
 | `GET` | `/api/admin/subscribers` | Retrieve newsletter subscriber list | None |
 
 ---
 
 ## 5. Database Schema
 
-The database uses SQLAlchemy ORM models defined in [`backend/app/models.py`](backend/app/models.py):
+The database uses SQLAlchemy ORM models defined in [`backend/app/models.py`](backend/app/models.py) structured into clean, normalized tables:
 
-### Table: `customers`
+### Table: `customers` (Dining Guests)
 - `id` (Integer, Primary Key)
-- `name` (String 255, Nullable)
-- `email` (String 255, Unique, Indexed, Not Null)
-- `phone` (String 50, Nullable)
-- `newsletter_signup` (Boolean, Default: False)
+- `name` (String 255, Not Null) — Full name of dining guest
+- `email` (String 255, Unique, Indexed, Not Null) — Primary email contact
+- `phone` (String 50, Nullable) — Phone number for reservation verification
+- `created_at` (DateTime, Default: UTC Now)
+
+### Table: `subscribers` (Mailing List)
+- `id` (Integer, Primary Key)
+- `email` (String 255, Unique, Indexed, Not Null) — Newsletter subscriber email
 - `created_at` (DateTime, Default: UTC Now)
 
 ### Table: `reservations`

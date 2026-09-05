@@ -7,10 +7,9 @@ class Customer(db.Model):
     __tablename__ = "customers"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=True)
+    name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True, index=True)
     phone = db.Column(db.String(50), nullable=True)
-    newsletter_signup = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     reservations = db.relationship("Reservation", back_populates="customer")
@@ -21,7 +20,21 @@ class Customer(db.Model):
             "name": self.name,
             "email": self.email,
             "phone": self.phone,
-            "newsletter_signup": self.newsletter_signup,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class Subscriber(db.Model):
+    __tablename__ = "subscribers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), nullable=False, unique=True, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "email": self.email,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
 
@@ -56,4 +69,3 @@ class Reservation(db.Model):
             "table_number": self.table_number,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
-

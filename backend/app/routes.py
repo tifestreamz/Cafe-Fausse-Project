@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy.exc import IntegrityError
 
 from .extensions import db
-from .models import Customer, Reservation
+from .models import Customer, Reservation, Subscriber
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -173,16 +173,11 @@ def subscribe_newsletter():
     if not email or not EMAIL_RE.match(email):
         return jsonify({"error": "Please enter a valid email address."}), 400
 
-    customer = Customer.query.filter_by(email=email).first()
-    derived_name = email.split("@")[0].replace(".", " ").title()
-    if customer is None:
-        customer = Customer(name=derived_name, email=email, newsletter_signup=True)
-        db.session.add(customer)
-    else:
-        if not customer.name:
-            customer.name = derived_name
-        customer.newsletter_signup = True
-    db.session.commit()
+    subscriber = Subscriber.query.filter_by(email=email).first()
+    if subscriber is None:
+        subscriber = Subscriber(email=email)
+        db.session.add(subscriber)
+        db.session.commit()
 
     return jsonify({"email": email, "subscribed": True}), 201
 
@@ -277,9 +272,18 @@ def admin_cancel_reservation(reservation_id):
     })
 
 
+@api.get("/admin/customers")
+def admin_get_customers():
+    customers = Customer.query.order_by(Customer.created_at.desc()).all()
+    return jsonify({
+        "count": len(customers),
+        "customers": [c.to_dict() for c in customers],
+    })
+
+
 @api.get("/admin/subscribers")
 def admin_get_subscribers():
-    subscribers = Customer.query.filter_by(newsletter_signup=True).order_by(Customer.created_at.desc()).all()
+    subscribers = Subscriber.query.order_by(Subscriber.created_at.desc()).all()
     return jsonify({
         "count": len(subscribers),
         "subscribers": [s.to_dict() for s in subscribers],
