@@ -8,6 +8,25 @@ import {
   adminCancelReservation,
   adminGetSubscribers,
 } from "../api";
+import {
+  Lock,
+  KeyRound,
+  Landmark,
+  RefreshCw,
+  LogOut,
+  Check,
+  LayoutGrid,
+  ClipboardList,
+  Mail,
+  Utensils,
+  Wine,
+  Download,
+  X,
+  Search,
+  Calendar,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 
 const SERVICE_SLOTS = [
   "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"
@@ -38,10 +57,11 @@ export default function Admin() {
 
   // Data states
   const [tableData, setTableData] = useState(null);
-  const [reservations, setReservations] = useState([]);
+  const [allReservations, setAllReservations] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [actionMsg, setActionMsg] = useState("");
+  const [ledgerViewMode, setLedgerViewMode] = useState("all"); // 'all' | 'selected'
 
   // Selected table inspection modal
   const [inspectTable, setInspectTable] = useState(null);
@@ -75,11 +95,11 @@ export default function Admin() {
     try {
       const [tablesRes, resRes, subsRes] = await Promise.all([
         adminGetTables(selectedDate, selectedHour),
-        adminGetReservations(selectedDate),
+        adminGetReservations(), // Always retrieve all reservations so none are hidden
         adminGetSubscribers(),
       ]);
       setTableData(tablesRes);
-      setReservations(resRes.reservations || []);
+      setAllReservations(resRes.reservations || []);
       setSubscribers(subsRes.subscribers || []);
     } catch {
       // Handled inside api.js fallbacks
@@ -94,13 +114,13 @@ export default function Admin() {
 
     Promise.all([
       adminGetTables(selectedDate, selectedHour),
-      adminGetReservations(selectedDate),
+      adminGetReservations(),
       adminGetSubscribers(),
     ])
       .then(([tablesRes, resRes, subsRes]) => {
         if (!isMounted) return;
         setTableData(tablesRes);
-        setReservations(resRes.reservations || []);
+        setAllReservations(resRes.reservations || []);
         setSubscribers(subsRes.subscribers || []);
       })
       .catch(() => {})
@@ -129,18 +149,44 @@ export default function Admin() {
     }
   }
 
+  // Selected date reservations for floor plan & day stats
+  const selectedDateReservations = useMemo(() => {
+    return allReservations.filter((r) => r.date === selectedDate);
+  }, [allReservations, selectedDate]);
+
   // Filtered reservations ledger
-  const filteredReservations = useMemo(() => {
-    if (!searchQuery.trim()) return reservations;
+  const displayedReservations = useMemo(() => {
+    const baseList = ledgerViewMode === "selected" ? selectedDateReservations : allReservations;
+    if (!searchQuery.trim()) return baseList;
     const q = searchQuery.toLowerCase();
-    return reservations.filter((r) => {
+    return baseList.filter((r) => {
       const name = (r.guest_name || "").toLowerCase();
       const email = (r.email || "").toLowerCase();
       const phone = (r.phone || "").toLowerCase();
       const table = String(r.table_number || "");
-      return name.includes(q) || email.includes(q) || phone.includes(q) || table.includes(q);
+      const date = String(r.date || "").toLowerCase();
+      const hour = String(r.hour || "").toLowerCase();
+      return (
+        name.includes(q) ||
+        email.includes(q) ||
+        phone.includes(q) ||
+        table.includes(q) ||
+        date.includes(q) ||
+        hour.includes(q)
+      );
     });
-  }, [reservations, searchQuery]);
+  }, [ledgerViewMode, selectedDateReservations, allReservations, searchQuery]);
+
+  function jumpToFloorPlan(res) {
+    if (res.date) setSelectedDate(res.date);
+    if (res.hour) setSelectedHour(res.hour);
+    setActiveTab("floor");
+    setInspectTable({
+      table_number: res.table_number,
+      is_occupied: true,
+      reservation: res,
+    });
+  }
 
   // Export subscribers to CSV
   function handleExportCSV() {
@@ -190,12 +236,11 @@ export default function Admin() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "24px",
                 margin: "0 auto 18px",
                 color: "var(--gold)",
               }}
             >
-              🔒
+              <Lock size={24} color="var(--gold)" />
             </div>
             <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "28px", color: "var(--text-heading)", margin: "0 0 8px" }}>
               Manager Access
@@ -255,8 +300,8 @@ export default function Admin() {
             </form>
 
             <div style={{ marginTop: "24px", paddingTop: "18px", borderTop: "1px solid rgba(200, 169, 126, 0.15)" }}>
-              <span style={{ fontSize: "11px", color: "var(--gold)", letterSpacing: "0.5px" }}>
-                🔑 Default test passcode: <strong>fausse2026</strong>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "11px", color: "var(--gold)", letterSpacing: "0.5px" }}>
+                <KeyRound size={13} style={{ flexShrink: 0 }} /> Default test passcode: <strong>fausse2026</strong>
               </span>
             </div>
           </div>
@@ -269,7 +314,7 @@ export default function Admin() {
   const occupiedCount = tableData?.occupied_count ?? 0;
   const totalTables = tableData?.total_tables ?? 30;
   const occupancyRate = tableData?.occupancy_rate ?? 0;
-  const totalCovers = reservations.reduce((acc, r) => acc + (parseInt(r.guests, 10) || 0), 0);
+  const totalCovers = selectedDateReservations.reduce((acc, r) => acc + (parseInt(r.guests, 10) || 0), 0);
 
   return (
     <div>
@@ -291,7 +336,7 @@ export default function Admin() {
         >
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <span style={{ fontSize: "20px" }}>🏛️</span>
+              <Landmark size={24} color="var(--gold)" />
               <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "32px", color: "var(--text-heading)", margin: 0 }}>
                 Dining Room Operations
               </h1>
@@ -306,16 +351,18 @@ export default function Admin() {
               type="button"
               onClick={loadDashboardData}
               className="btn btn-outline"
-              style={{ padding: "8px 16px", fontSize: "12px" }}
+              style={{ padding: "8px 16px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
-              🔄 Refresh
+              <RefreshCw size={13} />
+              Refresh
             </button>
             <button
               type="button"
               onClick={handleLogout}
               className="btn btn-outline"
-              style={{ padding: "8px 16px", fontSize: "12px", color: "#e88080", borderColor: "rgba(220, 80, 80, 0.4)" }}
+              style={{ padding: "8px 16px", fontSize: "12px", color: "#e88080", borderColor: "rgba(220, 80, 80, 0.4)", display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
+              <LogOut size={13} />
               Log Out
             </button>
           </div>
@@ -337,7 +384,7 @@ export default function Admin() {
               gap: "10px",
             }}
           >
-            <span>✓</span> {actionMsg}
+            <Check size={16} color="var(--gold)" /> {actionMsg}
           </div>
         )}
 
@@ -358,8 +405,8 @@ export default function Admin() {
         >
           <div style={{ display: "flex", alignItems: "center", gap: "18px", flexWrap: "wrap" }}>
             <div>
-              <label style={{ display: "block", fontSize: "11px", letterSpacing: "1px", color: "var(--gold)", textTransform: "uppercase", marginBottom: "6px" }}>
-                Service Date
+              <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", letterSpacing: "1px", color: "var(--gold)", textTransform: "uppercase", marginBottom: "6px" }}>
+                <Calendar size={12} /> Service Date
               </label>
               <input
                 type="date"
@@ -377,8 +424,8 @@ export default function Admin() {
             </div>
 
             <div>
-              <label style={{ display: "block", fontSize: "11px", letterSpacing: "1px", color: "var(--gold)", textTransform: "uppercase", marginBottom: "6px" }}>
-                Seating Time Slot
+              <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", letterSpacing: "1px", color: "var(--gold)", textTransform: "uppercase", marginBottom: "6px" }}>
+                <Clock size={12} /> Seating Time Slot
               </label>
               <select
                 value={selectedHour}
@@ -447,7 +494,7 @@ export default function Admin() {
               {totalCovers}
             </div>
             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-              Across {reservations.length} reservations today
+              Across {selectedDateReservations.length} reservations for this date
             </div>
           </div>
 
@@ -465,13 +512,14 @@ export default function Admin() {
         </div>
 
         {/* Tab Navigation */}
-        <div style={{ display: "flex", gap: "10px", borderBottom: "1px solid var(--gold-border)", marginBottom: "32px" }}>
+        <div style={{ display: "flex", gap: "10px", borderBottom: "1px solid var(--gold-border)", marginBottom: "32px", overflowX: "auto" }}>
           {[
-            { id: "floor", label: "🗺️ Floor Plan (30 Tables)" },
-            { id: "ledger", label: `📋 Reservation Ledger (${reservations.length})` },
-            { id: "subscribers", label: `💌 Mailing List (${subscribers.length})` },
+            { id: "floor", icon: LayoutGrid, label: "Floor Plan (30 Tables)" },
+            { id: "ledger", icon: ClipboardList, label: `Reservation Ledger (${allReservations.length})` },
+            { id: "subscribers", icon: Mail, label: `Mailing List (${subscribers.length})` },
           ].map((tab) => {
             const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
@@ -486,9 +534,14 @@ export default function Admin() {
                   fontWeight: isActive ? 600 : 400,
                   fontSize: "14px",
                   cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  whiteSpace: "nowrap",
                   transition: "all 0.2s ease",
                 }}
               >
+                <Icon size={16} />
                 {tab.label}
               </button>
             );
@@ -564,11 +617,18 @@ export default function Admin() {
 
                       <div
                         style={{
-                          fontSize: "18px",
+                          height: "28px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                           margin: "6px 0",
                         }}
                       >
-                        {isOcc ? "🍷" : "🍽️"}
+                        {isOcc ? (
+                          <Wine size={20} color="#e28743" />
+                        ) : (
+                          <Utensils size={18} color="var(--gold)" style={{ opacity: 0.6 }} />
+                        )}
                       </div>
 
                       <div
@@ -610,24 +670,67 @@ export default function Admin() {
                 marginBottom: "20px",
               }}
             >
-              <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "22px", color: "var(--text-heading)", margin: 0 }}>
-                Reservation Roster
-              </h2>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search guest name, email, table #..."
-                style={{
-                  background: "#181410",
-                  border: "1px solid rgba(200, 169, 126, 0.3)",
-                  borderRadius: "6px",
-                  color: "#e8e3da",
-                  padding: "8px 14px",
-                  fontSize: "13px",
-                  width: "280px",
-                }}
-              />
+              <div>
+                <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "22px", color: "var(--text-heading)", margin: 0 }}>
+                  Reservation Roster
+                </h2>
+                <div style={{ display: "flex", gap: "8px", marginTop: "10px", alignItems: "center", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={() => setLedgerViewMode("all")}
+                    style={{
+                      background: ledgerViewMode === "all" ? "var(--gold)" : "rgba(200, 169, 126, 0.08)",
+                      color: ledgerViewMode === "all" ? "#120e0b" : "var(--gold)",
+                      border: "1px solid var(--gold)",
+                      borderRadius: "6px",
+                      padding: "6px 14px",
+                      fontSize: "12px",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    All Reservations ({allReservations.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLedgerViewMode("selected")}
+                    style={{
+                      background: ledgerViewMode === "selected" ? "var(--gold)" : "rgba(200, 169, 126, 0.08)",
+                      color: ledgerViewMode === "selected" ? "#120e0b" : "var(--gold)",
+                      border: "1px solid var(--gold)",
+                      borderRadius: "6px",
+                      padding: "6px 14px",
+                      fontSize: "12px",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    Selected Date: {selectedDate} ({selectedDateReservations.length})
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ position: "relative", minWidth: "280px" }}>
+                <Search size={14} color="var(--gold)" style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search guest, email, date, table #..."
+                  style={{
+                    background: "#181410",
+                    border: "1px solid rgba(200, 169, 126, 0.3)",
+                    borderRadius: "6px",
+                    color: "#e8e3da",
+                    padding: "9px 14px 9px 34px",
+                    fontSize: "13px",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
             </div>
 
             <div
@@ -643,21 +746,21 @@ export default function Admin() {
                   <tr style={{ background: "#1c1813", borderBottom: "1px solid var(--gold-border)", color: "var(--gold)" }}>
                     <th style={{ padding: "14px 18px", fontWeight: 600 }}>TABLE</th>
                     <th style={{ padding: "14px 18px", fontWeight: 600 }}>GUEST</th>
-                    <th style={{ padding: "14px 18px", fontWeight: 600 }}>TIME</th>
+                    <th style={{ padding: "14px 18px", fontWeight: 600 }}>DATE &amp; TIME</th>
                     <th style={{ padding: "14px 18px", fontWeight: 600 }}>COVERS</th>
                     <th style={{ padding: "14px 18px", fontWeight: 600 }}>CONTACT</th>
                     <th style={{ padding: "14px 18px", fontWeight: 600, textAlign: "right" }}>ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredReservations.length === 0 ? (
+                  {displayedReservations.length === 0 ? (
                     <tr>
                       <td colSpan={6} style={{ padding: "36px", textAlign: "center", color: "var(--text-muted)" }}>
-                        No reservations found matching this query for {selectedDate}.
+                        No reservations found matching this query {ledgerViewMode === "selected" ? `for ${selectedDate}` : ""}.
                       </td>
                     </tr>
                   ) : (
-                    filteredReservations.map((r) => (
+                    displayedReservations.map((r) => (
                       <tr
                         key={r.id}
                         style={{ borderBottom: "1px solid rgba(200, 169, 126, 0.1)", color: "#e8e3da" }}
@@ -681,32 +784,59 @@ export default function Admin() {
                           {r.guest_name}
                         </td>
                         <td style={{ padding: "14px 18px", color: "var(--gold)" }}>
-                          {r.hour || selectedHour}
+                          <div style={{ fontWeight: 600 }}>{r.date}</div>
+                          <div style={{ fontSize: "12px", color: "#e8e3da", marginTop: "2px" }}>{r.hour || "19:00"} Service</div>
                         </td>
                         <td style={{ padding: "14px 18px" }}>
-                          {r.guests} Guests
+                          <div>{r.guests} Guests</div>
+                          {r.wine_pairing && (
+                            <span style={{ fontSize: "10px", color: "var(--gold)", display: "inline-flex", alignItems: "center", gap: "3px", marginTop: "2px" }}>
+                              <Wine size={11} /> Wine Pairing
+                            </span>
+                          )}
                         </td>
                         <td style={{ padding: "14px 18px", color: "var(--text-muted)", fontSize: "12px" }}>
                           <div>{r.email}</div>
                           {r.phone && <div>{r.phone}</div>}
                         </td>
                         <td style={{ padding: "14px 18px", textAlign: "right" }}>
-                          <button
-                            type="button"
-                            onClick={() => handleCancel(r.id, r.table_number)}
-                            style={{
-                              background: "rgba(220, 80, 80, 0.15)",
-                              border: "1px solid rgba(220, 80, 80, 0.4)",
-                              color: "#ff8b8b",
-                              padding: "6px 12px",
-                              borderRadius: "6px",
-                              fontSize: "12px",
-                              cursor: "pointer",
-                              fontWeight: 600,
-                            }}
-                          >
-                            Cancel &amp; Free
-                          </button>
+                          <div style={{ display: "inline-flex", gap: "8px" }}>
+                            <button
+                              type="button"
+                              onClick={() => jumpToFloorPlan(r)}
+                              style={{
+                                background: "rgba(200, 169, 126, 0.12)",
+                                border: "1px solid var(--gold-border)",
+                                color: "var(--gold)",
+                                padding: "6px 10px",
+                                borderRadius: "6px",
+                                fontSize: "11px",
+                                cursor: "pointer",
+                                fontWeight: 600,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "4px",
+                              }}
+                            >
+                              Floor Plan <ArrowRight size={11} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleCancel(r.id, r.table_number)}
+                              style={{
+                                background: "rgba(220, 80, 80, 0.15)",
+                                border: "1px solid rgba(220, 80, 80, 0.4)",
+                                color: "#ff8b8b",
+                                padding: "6px 12px",
+                                borderRadius: "6px",
+                                fontSize: "12px",
+                                cursor: "pointer",
+                                fontWeight: 600,
+                              }}
+                            >
+                              Cancel &amp; Free
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -741,9 +871,9 @@ export default function Admin() {
                 type="button"
                 onClick={handleExportCSV}
                 className="btn btn-solid"
-                style={{ padding: "10px 18px", fontSize: "12px", fontWeight: 700 }}
+                style={{ padding: "10px 18px", fontSize: "12px", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: "8px" }}
               >
-                📥 Export CSV
+                <Download size={14} /> Export CSV
               </button>
             </div>
 
@@ -855,15 +985,19 @@ export default function Admin() {
                 <button
                   type="button"
                   onClick={() => setInspectTable(null)}
+                  aria-label="Close table inspection"
                   style={{
                     background: "transparent",
                     border: "none",
                     color: "var(--text-muted)",
-                    fontSize: "20px",
                     cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
                   }}
                 >
-                  ✕
+                  <X size={20} />
                 </button>
               </div>
 

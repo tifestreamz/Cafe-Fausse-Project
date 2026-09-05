@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Wine, X, Sparkles } from "lucide-react";
 import { Slot } from "../components/Media";
 import PageHero from "../components/PageHero";
 import { IMAGES, MENU_CATEGORIES } from "../data/content";
@@ -41,7 +42,7 @@ export default function Menu() {
             gap: "8px",
           }}
         >
-          <span>✻</span> Click any item to explore ingredients &amp; sommelier pairings
+          <Sparkles size={13} color="var(--gold)" /> Click any item to explore ingredients &amp; sommelier pairings
         </span>
       </div>
 
@@ -169,7 +170,7 @@ export default function Menu() {
                 transition: "all 0.2s ease",
               }}
             >
-              ✕
+              <X size={18} />
             </button>
 
             {/* Dish Hero Image */}
@@ -302,7 +303,7 @@ export default function Menu() {
                     gap: "14px",
                   }}
                 >
-                  <span style={{ fontSize: "20px" }}>🍷</span>
+                  <Wine size={22} color="var(--gold)" style={{ flexShrink: 0, marginTop: "2px" }} />
                   <div>
                     <div style={{ fontSize: "12px", letterSpacing: "1.5px", color: "var(--gold)", fontWeight: 600, textTransform: "uppercase" }}>
                       Sommelier Pairing Note

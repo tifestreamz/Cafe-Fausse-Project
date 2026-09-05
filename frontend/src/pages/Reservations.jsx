@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Wine, Check, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 import PageHero from "../components/PageHero";
 import { CONTACT, IMAGES } from "../data/content";
 import { createReservation, getAvailability } from "../api";
@@ -316,11 +317,10 @@ export default function Reservations() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "28px",
                     margin: "0 auto 20px",
                   }}
                 >
-                  ✓
+                  <Check size={30} strokeWidth={2.5} color="var(--gold)" />
                 </div>
                 <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "32px", color: "var(--text-heading)", margin: "0 0 12px" }}>
                   Reservation Confirmed
@@ -368,8 +368,8 @@ export default function Reservations() {
                   </div>
                   {winePairing && (
                     <div style={{ gridColumn: "span 2", borderTop: "1px solid rgba(200,169,126,0.15)", paddingTop: "12px" }}>
-                      <span style={{ fontSize: "13px", color: "var(--gold)" }}>
-                        🍷 Sommelier Wine Pairing included (+${145 * parseInt(guests, 10)})
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--gold)" }}>
+                        <Wine size={15} /> Sommelier Wine Pairing included (+${145 * parseInt(guests, 10)})
                       </span>
                     </div>
                   )}
@@ -452,12 +452,14 @@ export default function Reservations() {
                           background: "none",
                           border: "none",
                           color: "var(--gold)",
-                          fontSize: "18px",
                           cursor: "pointer",
                           padding: "4px 8px",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
-                        ‹
+                        <ChevronLeft size={16} />
                       </button>
                       <span style={{ fontSize: "13px", letterSpacing: "1.5px", color: "#f0ece4", fontWeight: 600 }}>
                         {MONTH_NAMES[selectedMonth]} {selectedYear}
@@ -470,12 +472,14 @@ export default function Reservations() {
                           background: "none",
                           border: "none",
                           color: "var(--gold)",
-                          fontSize: "18px",
                           cursor: "pointer",
                           padding: "4px 8px",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
-                        ›
+                        <ChevronRight size={16} />
                       </button>
                     </div>
                   </div>
@@ -545,7 +549,7 @@ export default function Reservations() {
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--gold)", fontWeight: 600, fontSize: "13px", marginBottom: "6px" }}>
-                        <span>⚠️</span>
+                        <AlertTriangle size={16} color="var(--gold)" style={{ flexShrink: 0 }} />
                         <span>The {slotPrompt.time} seating is fully booked on {selectedDate}</span>
                       </div>
                       <p style={{ color: "#d2ccc2", fontSize: "12px", lineHeight: 1.5, margin: "0 0 12px" }}>
@@ -681,7 +685,7 @@ export default function Reservations() {
                     alignItems: "flex-start",
                   }}
                 >
-                  <span style={{ fontSize: "24px" }}>🍷</span>
+                  <Wine size={26} color="var(--gold)" style={{ flexShrink: 0, marginTop: "2px" }} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "var(--font-serif)", fontSize: "18px", color: "var(--text-heading)", marginBottom: "4px" }}>
                       Sommelier Wine Pairing

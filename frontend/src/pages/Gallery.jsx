@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Slot } from "../components/Media";
 import PageHero from "../components/PageHero";
 import { AWARDS, GALLERY_IMAGES, IMAGES, REVIEWS } from "../data/content";
@@ -99,33 +100,39 @@ export default function Gallery() {
             padding: "40px",
           }}
         >
-          <span
+          <button
+            type="button"
             onClick={() => setLightboxIdx(null)}
-            style={{ position: "absolute", top: "28px", right: "40px", color: "#e8e3da", fontSize: "28px", cursor: "pointer", lineHeight: 1 }}
+            aria-label="Close lightbox"
+            style={{ position: "absolute", top: "28px", right: "40px", background: "none", border: "none", color: "#e8e3da", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: "8px" }}
           >
-            ×
-          </span>
-          <span
+            <X size={28} />
+          </button>
+          <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               shift(-1);
             }}
-            style={{ position: "absolute", left: "24px", top: "50%", transform: "translateY(-50%)", color: "#e8e3da", fontSize: "36px", cursor: "pointer", padding: "12px" }}
+            aria-label="Previous image"
+            style={{ position: "absolute", left: "24px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#e8e3da", cursor: "pointer", padding: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}
           >
-            ‹
-          </span>
+            <ChevronLeft size={36} />
+          </button>
           <div onClick={(e) => e.stopPropagation()} style={{ width: "min(900px, 80vw)", height: "min(600px, 70vh)" }}>
             <Slot src={lightboxImg.src} placeholder={lightboxImg.placeholder} alt={lightboxImg.caption} style={{ width: "100%", height: "100%" }} />
           </div>
-          <span
+          <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               shift(1);
             }}
-            style={{ position: "absolute", right: "24px", top: "50%", transform: "translateY(-50%)", color: "#e8e3da", fontSize: "36px", cursor: "pointer", padding: "12px" }}
+            aria-label="Next image"
+            style={{ position: "absolute", right: "24px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#e8e3da", cursor: "pointer", padding: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}
           >
-            ›
-          </span>
+            <ChevronRight size={36} />
+          </button>
         </div>
       )}
     </div>

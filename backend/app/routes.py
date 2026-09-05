@@ -151,11 +151,7 @@ def create_reservation():
         db.session.add(reservation)
         try:
             db.session.commit()
-            return jsonify({
-                "table_number": table_number,
-                "time_slot": time_slot.isoformat(),
-                "email": email,
-            }), 201
+            return jsonify(reservation.to_dict()), 201
         except IntegrityError:
             db.session.rollback()
             available_tables.remove(table_number)
