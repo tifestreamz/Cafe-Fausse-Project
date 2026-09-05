@@ -8,17 +8,21 @@ def seed_initial_data():
     try:
         if Customer.query.filter_by(newsletter_signup=True).count() == 0:
             demo_subs = [
-                "gourmet.guide@michelin.com",
-                "sommelier.club@tuscany-wine.it",
-                "patron.elena@gmail.com",
-                "foodie.dc@capitol-eats.org",
-                "artisan.tastes@gastronomy.com",
+                {"name": "Michelin Guide Editorial", "email": "gourmet.guide@michelin.com", "phone": "(202) 555-0199"},
+                {"name": "Tuscany Sommelier Club", "email": "sommelier.club@tuscany-wine.it", "phone": "(202) 555-0142"},
+                {"name": "Elena Vance", "email": "patron.elena@gmail.com", "phone": "(202) 555-0178"},
+                {"name": "Capitol Eats Review", "email": "foodie.dc@capitol-eats.org", "phone": "(202) 555-0125"},
+                {"name": "Gastronomy Artisan Journal", "email": "artisan.tastes@gastronomy.com", "phone": "(202) 555-0164"},
             ]
-            for email in demo_subs:
-                existing = Customer.query.filter_by(email=email).first()
+            for sub in demo_subs:
+                existing = Customer.query.filter_by(email=sub["email"]).first()
                 if not existing:
-                    db.session.add(Customer(email=email, newsletter_signup=True))
+                    db.session.add(Customer(name=sub["name"], email=sub["email"], phone=sub["phone"], newsletter_signup=True))
                 else:
+                    if not existing.name:
+                        existing.name = sub["name"]
+                    if not existing.phone:
+                        existing.phone = sub["phone"]
                     existing.newsletter_signup = True
             db.session.commit()
 

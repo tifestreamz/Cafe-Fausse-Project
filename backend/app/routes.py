@@ -174,10 +174,13 @@ def subscribe_newsletter():
         return jsonify({"error": "Please enter a valid email address."}), 400
 
     customer = Customer.query.filter_by(email=email).first()
+    derived_name = email.split("@")[0].replace(".", " ").title()
     if customer is None:
-        customer = Customer(email=email, newsletter_signup=True)
+        customer = Customer(name=derived_name, email=email, newsletter_signup=True)
         db.session.add(customer)
     else:
+        if not customer.name:
+            customer.name = derived_name
         customer.newsletter_signup = True
     db.session.commit()
 
