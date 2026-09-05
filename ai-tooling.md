@@ -30,6 +30,7 @@ The development of Café Fausse leveraged an agentic, multi-modal AI pair progra
 - **Interactive Menu Component**: Built a modal dialog system in `frontend/src/pages/Menu.jsx` with keyboard escape listeners, body scroll locks, wine pairing highlights, and responsive layouts.
 - **Reservation & Calendar Engine**: Created a customized monthly calendar in `frontend/src/pages/Reservations.jsx` that dynamically calculated weekday offsets, restricted reservations to a 60-day window, and synchronized with live availability data.
 - **Manager Portal (`/admin`)**: Engineered a 30-table floor plan visualizer showing color-coded occupancy in real time, a reservation roster with live search, a table cancellation action that instantly frees restaurant capacity, and a subscriber export feature.
+- **Database Schema Normalization**: Structured a clean relational model separating dining patrons (`customers`: full name, email, phone) from newsletter signups (`subscribers`: email only), ensuring zero `NULL` fields and enforcing strict database integrity.
 - **Icon Modernization**: Systematically detected raw emojis across the entire project and refactored all components to use crisp, accessible SVG vector icons from `lucide-react`.
 
 ### C. Automated Verification & Visual Testing

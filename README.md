@@ -18,7 +18,7 @@ The system is structured as a decoupled, full-stack architecture:
 │   ├── app/
 │   │   ├── __init__.py       # Application factory, CORS, and DB initialization
 │   │   ├── extensions.py     # SQLAlchemy instance
-│   │   ├── models.py         # Customer and Reservation database models
+│   │   ├── models.py         # Customer, Subscriber, and Reservation database models
 │   │   ├── routes.py         # API endpoints (Reservations, Availability, Admin, Newsletter)
 │   │   ├── seeds.py          # Demo seed data (initial bookings & subscribers)
 │   │   └── run.py            # Alternate runner for production deployment
@@ -129,17 +129,22 @@ cd Cafe-Fausse-Project
    pip install -r requirements.txt
    ```
 
-4. Set your `DATABASE_URL` environment variable:
+4. Configure your database connection:
    ```bash
-   # Example:
-   export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/cafe_fausse"
+   # Option A: Copy the provided .env template and set your connection string:
+   cp .env.example .env
+   # Edit .env and set your PostgreSQL connection string:
+   # DATABASE_URL="postgresql://username:password@localhost:5432/cafe_fausse"
+
+   # Option B: Or export directly in your terminal:
+   export DATABASE_URL="postgresql://username:password@localhost:5432/cafe_fausse"
    ```
 
 5. Start the Flask server:
    ```bash
    python run.py
    ```
-   *The backend starts on `http://localhost:5001` and connects to your PostgreSQL database.*
+   *The backend automatically loads `.env`, creates tables (`customers`, `subscribers`, `reservations`), seeds initial realistic demo data, and listens on `http://localhost:5001`.*
 
 ---
 
