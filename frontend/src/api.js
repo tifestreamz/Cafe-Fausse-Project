@@ -141,6 +141,7 @@ async function request(path, body) {
     return data;
   } catch (err) {
     // Graceful client fallback if backend server is offline or unreachable (e.g. static Vercel preview)
+    console.warn(`[Café Fausse] Backend API at ${API_BASE} is unreachable. Falling back to local browser storage. Start backend with DATABASE_URL to write directly to PostgreSQL.`, err);
     if (path === "/api/reservations") {
       const list = getStoredReservations();
       const bookedTables = new Set(
